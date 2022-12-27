@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gun.board.dao.FreeDAO">
+   <insert id="insertBoards_free">
+      insert into
+      board_free(board_num, board_title, board_content, board_id, board_nickname, board_see)
+      values(
+      BOARD_FREE_SEQ.NEXTVAL, #{board_title}, #{board_content}, #{board_id}, #{board_nickname}, #{board_see}
+      )
+   </insert>
+   
+   <insert id="insertPhoto_free">
+      insert into board_file_free(board_num, board_fileid,board_uploadfileid)
+      values(
+      (select max(board_num) from board_free),#{board_fileid},#{board_uploadfileid}
+      )
+   </insert>
+
+   <select id="getFree" resultType="Free" parameterType="Map">
+      select * from board_free 
+        order by board_free.board_date desc 
+   </select>
+   
+   <!-- home에 적용될 자유 게시판 출력화면(7개짜리) -->
+   <select id="getFree_home" resultType="Free" parameterType="Map">
+   select * from board_free order by board_free.board_date desc
+   </select>
+   
+   <select id="getBoards_free" resultType="Free">
+      select*from board_free left join board_file_free on board_free.board_num=board_file_free.board_num
+        where board_free.board_num=#{board_num}
+   </select>
+
+   <update id="upHits_free">
+      update board_free set board_hits=board_hits+1
+      where
+      board_num=#{board_num}
+   </update>
+
+   <delete id="deleteBoards_free">
+      delete from board_free where board_num=#{board_num}
+   </delete>
+
+   <update id="updateBoards_free">
+      update board_free set board_title=#{board_title},
+      board_content=#{board_content},
+      board_see=#{board_see}
+      where
+      board_num=#{board_num}
+   </update>
+   
+   <update id="updatePhoto_free">
+      update board_file_free set board_fileid=#{board_fileid}, board_uploadfileid=#{board_uploadfileid}
+      where board_num=#{board_num}
+   </update>
+
+   <update id="changeReply_free">
+      <choose>
+         <when test="type==0">
+            update board_free
+            set board_replies=board_replies+1
+            where
+            board_num=#{board_num}
+         </when>
+         <when test="type==1">
+            update board_free
+            set board_replies=board_replies-1
+            where
+            board_num=#{board_num}
+         </when>
+      </choose>
+   </update>
+   
+   <select id="findfree" parameterType="Map" resultType="Free">
+        select * from board_free
+      <choose>
+
+         <when test="searchType=='board_title'">
+            where board_title like
+            '%' || #{searchContent} || '%'
+            order by board_free.board_date desc
+         </when>
+         <when test="searchType=='board_content'">
+            where board_content like
+            '%' || #{searchContent} || '%'
+            order by board_free.board_date desc
+         </when>
+         <when test="searchType=='board_nickname'">
+            where board_nickname like
+            '%' || #{searchContent} || '%'
+            order by board_free.board_date desc
+         </when>
+         <when test="searchType=='all'">
+            where board_nickname like
+            '%' || #{searchContent} || '%'
+            or
+            board_title like
+            '%' || #{searchContent} || '%'
+            or
+            board_content like
+            '%' || #{searchContent} || '%' 
+            order by board_free.board_date desc
+         </when>
+      </choose> 
+   </select>
+   
+   <select id="getSort" parameterType="Map" resultType="Free">
+         select * from board_free
+         <choose>
+            <when test="sortValue=='new'">
+                ORDER BY board_date DESC
+            </when>
+            
+            <when test="sortValue=='count'">
+                ORDER BY board_hits DESC
+            </when>
+            
+            <when test="sortValue=='title'">
+                ORDER BY board_title ASC
+            </when>
+         </choose>
+   </select>
+</mapper>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gun.board.dao.BoardDAO">
+	<insert id="insertBoard">
+		insert into
+		board(board_num, board_title,
+		board_content, board_id, board_nickname, board_cost, board_see,
+		board_category)
+		values(
+		BOARD_SEQ.NEXTVAL, #{board_title},
+		#{board_content}, #{board_id},
+		#{board_nickname},#{board_cost},#{board_see},#{board_category}
+		)
+	</insert>
+
+	<insert id="insertPhoto">
+		insert into board_file(board_num,
+		board_fileid,board_uploadfileid)
+		values(
+		(select max(board_num) from
+		board),#{board_fileid},#{board_uploadfileid}
+		)
+	</insert>
+	<!-- 게시글 조회 (기존) -->
+	<select id="getBoards" resultType="Board" parameterType="Map">
+		<!--s elect * from board where board_id=#{friend_id} order by board_date 
+			desc -->
+		select * from board left join board_file on
+		board.board_num=board_file.board_num
+		where board.board_id=#{friend_id}
+		order by board.board_date desc
+	</select>
+	<!-- 거래 게시판 조회 (추가) -->
+	<select id="getTransaction" resultType="Board"
+		parameterType="Map">
+		select * from board left join board_file on
+		board.board_num=board_file.board_num
+		where board.board_category=#{transaction_name}
+		order by board.board_date desc
+	</select>
+
+	<select id="getTransaction_0" resultType="Board"
+		parameterType="Map">
+		select * from board left join board_file on
+		board.board_num=board_file.board_num
+		order by board.board_date desc
+	</select>
+
+	<!-- 게시글 조회 home용 (정렬 빼고 다른 조인, 조건 제외) -->
+	<select id="getBoards_home" resultType="Board"
+		parameterType="Map">
+		select * from board
+		where
+		board_category=#{board_category}
+		order by board.board_date desc
+	</select>
+
+
+	<!-- 게시글 하나 조회 -->
+	<select id="getBoard" resultType="Board">
+		select*from board left join
+		board_file on board.board_num=board_file.board_num
+		where
+		board.board_num=#{board_num}
+	</select>
+
+	<update id="upHits">
+		update board set board_hits=board_hits+1
+		where
+		board_num=#{board_num}
+	</update>
+
+	<delete id="deleteBoard">
+		delete from board where board_num=#{board_num}
+	</delete>
+
+	<update id="updateBoard">
+		update board set board_title=#{board_title},
+		board_content=#{board_content},
+		board_cost=#{board_cost},
+		board_see=#{board_see},
+		board_category=#{board_category}
+		where
+		board_num=#{board_num}
+	</update>
+
+	<update id="updatePhoto">
+		update board_file set board_fileid=#{board_fileid},
+		board_uploadfileid=#{board_uploadfileid}
+		where board_num=#{board_num}
+	</update>
+
+	<update id="changeReply">
+		<choose>
+			<when test="type==0">
+				update board
+				set board_replies=board_replies+1
+				where
+				board_num=#{board_num}
+			</when>
+			<when test="type==1">
+				update board
+				set board_replies=board_replies-1
+				where
+				board_num=#{board_num}
+			</when>
+		</choose>
+	</update>
+</mapper>

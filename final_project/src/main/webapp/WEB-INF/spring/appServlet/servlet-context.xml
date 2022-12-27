@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing 
+		infrastructure -->
+
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving 
+		up static resources in the ${webappRoot}/resources directory -->
+	<resources mapping="/resources/**" location="/resources/" />
+	<resources mapping="/img/**" location="/resources/img" />
+	<resources mapping="/css/**" location="/resources/css" />
+	<resources mapping="/scss/**" location="/resources/scss" />
+	<resources mapping="/vendor/**" location="/resources/vendor" />
+	<resources mapping="/js/**" location="/resources/js/" />
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources 
+		in the /WEB-INF/views directory -->
+	<beans:bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+	<beans:bean id="LoginInterceptor"
+		class="com.gun.board.interceptor.LoginInterceptor">
+	</beans:bean>
+	<interceptors>
+		<interceptor>
+			<mapping path="/message/management" />
+			<mapping path="/message/send" />
+			<mapping path="/message/get" />
+			<mapping path="/message/delete" />
+		
+			
+			<mapping path="/boards" />
+			<mapping path="/boards/insert" />
+			<mapping path="/boards/get" />
+			<mapping path="/boards/delete" />
+			<mapping path="/boards/update" />
+			
+			<mapping path="/boards_free" />
+			<mapping path="/boards_free/insert" />
+			<mapping path="/boards_free/get" />
+			<mapping path="/boards_free/delete" />
+			<mapping path="/boards_free/update" />
+			
+			<mapping path="/boards_data" />
+			<mapping path="/boards_data/insert" />
+			<mapping path="/boards_data/get" />
+			<mapping path="/boards_data/delete" />
+			<mapping path="/boards_data/update" />
+			
+		
+			<mapping path="/friend/findFriends" />
+			<mapping path="/friend/friendRequest" />
+			<mapping path="/friend/management" />
+			<beans:ref bean="LoginInterceptor" />
+		</interceptor>
+	</interceptors>
+
+	<context:component-scan base-package="com.gun.board" />
+
+</beans:beans>
