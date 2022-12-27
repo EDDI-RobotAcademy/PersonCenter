@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gun.board.dao.ReplyDataDAO">
+
+	<select id="getReplies" resultType="Reply_Data">
+		select* from reply_data where
+		board_num=#{board_num}
+		order by rreply_num,reply_num
+	</select>
+
+	<insert id="insertReply">
+		<choose>
+			<when test="rreply_id==''">
+				insert into
+				reply_data(board_num,reply_id,reply_content,reply_nickname)
+				values(
+				#{board_num},#{reply_id},#{reply_content},#{reply_nickname}
+				)
+			</when>
+			<when test="rreply_id!=''">
+				insert into
+				reply_data(board_num,reply_id,reply_content,reply_nickname,rreply_id,rreply_nickname,rreply_num)
+				values(
+				#{board_num},#{reply_id},#{reply_content},#{reply_nickname},#{rreply_id},#{rreply_nickname},
+				#{rreply_num}
+				)
+			</when>
+		</choose>
+	</insert>
+
+	<delete id="deleteReply">
+		delete from reply_data where reply_num=#{reply_num}
+	</delete>
+
+	<select id="getReply" resultType="Reply_Data">
+		select* from reply_data where
+		reply_num=#{reply_num}
+	</select>
+
+	<update id="updateReply">
+		update reply_data set reply_content=#{reply_content},
+		reply_date=current_timestamp where reply_num=#{reply_num}
+	</update>
+
+	<select id="recentlyAddedReplynum" resultType="_int">
+		select
+		max(reply_num) from reply_data
+	</select>
+
+	<update id="updateRReply_num">
+		update reply_data set rreply_num=#{reply_num}
+		where
+		reply_num=#{reply_num}
+	</update>
+</mapper>
