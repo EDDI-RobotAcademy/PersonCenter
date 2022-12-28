@@ -3,6 +3,8 @@ package com.gun.board.dao;
 import java.util.ArrayList;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.gun.board.vo.Customer;
 
 public interface FriendDAO {
@@ -25,7 +27,7 @@ public interface FriendDAO {
 	public ArrayList<String> getList(String cus_id) throws Exception;
 
 	// 친구 신청 받은 목록 뽑기
-	public ArrayList<String> getRequestList(String cus_id) throws Exception;
+	public ArrayList<String> getRequestList(@Param("cus_id")String cus_id, @Param("board_num")int board_num) throws Exception;
 
 	// 친구 수락하기
 	public int accept(Map<String, String> accept) throws Exception;
@@ -38,4 +40,21 @@ public interface FriendDAO {
 	public int removeFriend(Map<String, String> remove) throws Exception;
 
 	public String getfriend(String login_id) throws Exception;
+	
+	// 거래 수락시 업데이트 (수정한부분)
+	public int accept_2(Map<String, Object> accept)throws Exception;
+
+	public void acceptFriend_2(Map<String, Object> accept)throws Exception;
+
+	public String getStatus_2(Map<String, Object> search)throws Exception;
+
+	public int friendRequest_2(Map<String, Object> request)throws Exception;
+
+	public void friendRequestFriend_2(Map<String, Object> request)throws Exception;
+
+	public String getfriend_2(Map<String, Object> request)throws Exception;
+
+	public String getStatus_board(Map<String, Object> search)throws Exception;
+	
+	
 }

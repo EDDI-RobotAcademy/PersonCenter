@@ -146,7 +146,7 @@ public class TransactionController {
 			session.setAttribute("agree2", "successed");
 		}
 
-		ArrayList<String> request = fRepository.getRequestList(loginid);
+		ArrayList<String> request = fRepository.getRequestList(loginid, board_num);
 		model.addAttribute("request", request);
 		model.addAttribute("board", board);
 		model.addAttribute("page", page);

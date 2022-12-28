@@ -36,9 +36,7 @@ function deleteBoard(){
 				}
 			});}
 }
-function updateBoard(board_num){
-	location.href = "${pageContext.request.contextPath}/boards_data/update?board_num="+board_num+"&page=${page}&friend_id=${friend_id}";
-}
+
 function insertReply(){
 	$.ajax({
 		method:"post",
@@ -76,11 +74,12 @@ function deleteReply(reply_num){
 				
 					<!-- 작성자 본인이라면 수정, 삭제  -->
 					<!-- 상위 수정, 삭제, 목록 버튼 -->
+					<!-- 정보게시판 수정 버튼은 사라질 수도 있음 -->
 					<c:if test="${loginid==data.board_id}">
 						<a href="#" role="button"
 							class="BaseButton BaseButton--skinGray size_default"> <input
 							type="button" value="수정" id="update" name="update"
-							onclick="updateBoard('${data.board_num}')"
+							onclick="updateBoards_data('${data.board_num}')"
 							class="btn btn-default">
 						</a>
 
@@ -173,6 +172,8 @@ function deleteReply(reply_num){
 								<!---->
 							</div>
 							<!-- 사진이 비어있다면 안나오게 -->
+							<!-- 나의 게시판 (거래글)에만 있으면 될 거 같지만 일단 긁어옴 -->
+							 <c:if test="${!empty data.board_fileid}">
 								<div class="product_section">
 									<div class="ProductImage sold">
 										<div class="product_thumb">
@@ -183,9 +184,9 @@ function deleteReply(reply_num){
 											<!---->
 										</div>
 										<!---->
-											</div>
-										</div>
 									</div>
+								</div>
+							</c:if>
 							<!-- 사진이 없으면 안나옴  -->
 						</div> 
 						

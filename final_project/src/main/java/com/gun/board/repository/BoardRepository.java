@@ -45,7 +45,7 @@ public class BoardRepository {
 		return result;
 	}
 
-	// °Å·¡°Ô½ÃÆÇ (Ãß°¡)
+	// ï¿½Å·ï¿½ï¿½Ô½ï¿½ï¿½ï¿½ (ï¿½ß°ï¿½)
 	public ArrayList<Board> getTransaction(int transaction_name) {
 		ArrayList<Board> result = new ArrayList();
 		bdao = sqlSession.getMapper(BoardDAO.class);
@@ -62,7 +62,7 @@ public class BoardRepository {
 		return result;
 	}
 
-	// °Ô½Ã±Û Á¶È¸(±âÁ¸)
+	// ï¿½Ô½Ã±ï¿½ ï¿½ï¿½È¸(ï¿½ï¿½ï¿½ï¿½)
 	public ArrayList<Board> getBoards(String friend_id) {
 		ArrayList<Board> result = new ArrayList();
 		bdao = sqlSession.getMapper(BoardDAO.class);
@@ -75,7 +75,7 @@ public class BoardRepository {
 		return result;
 	}
 
-	// °Ô½Ã±Û Á¶È¸(È¨¿ë)
+	// ï¿½Ô½Ã±ï¿½ ï¿½ï¿½È¸(È¨ï¿½ï¿½)
 	public ArrayList<Board> getBoards_home(int i) {
 		ArrayList<Board> result = new ArrayList();
 		bdao = sqlSession.getMapper(BoardDAO.class);
@@ -101,7 +101,7 @@ public class BoardRepository {
 	}
 
 	public void upHits(int board_num) {
-		// Á¶È¸¼ö ¿Ã¸®±â
+		// ï¿½ï¿½È¸ï¿½ï¿½ ï¿½Ã¸ï¿½ï¿½ï¿½
 		bdao = sqlSession.getMapper(BoardDAO.class);
 		try {
 			bdao.upHits(board_num);

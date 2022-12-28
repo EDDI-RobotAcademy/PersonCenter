@@ -3,27 +3,27 @@ package com.gun.board.vo;
 import java.util.Date;
 
 public class Board {
-	// °Ô½Ã±Û °íÀ¯ ¹øÈ£
+	// ï¿½Ô½Ã±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È£
 	private int board_num;
-	// °Ô½Ã±Û Á¦¸ñ
+	// ï¿½Ô½Ã±ï¿½ ï¿½ï¿½ï¿½ï¿½
 	private String board_title;
-	// °Ô½Ã±Û ³»¿ë
+	// ï¿½Ô½Ã±ï¿½ ï¿½ï¿½ï¿½ï¿½
 	private String board_content;
-	// ÀÛ¼º ³¯Â¥
+	// ï¿½Û¼ï¿½ ï¿½ï¿½Â¥
 	private Date board_date;
-	// ÀÛ¼ºÀÚ ¾ÆÀÌµð
+	// ï¿½Û¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìµï¿½
 	private String board_id;
-	// Á¶È¸¼ö
+	// ï¿½ï¿½È¸ï¿½ï¿½
 	private int board_hits;
-	// ´Ð³×ÀÓ
+	// ï¿½Ð³ï¿½ï¿½ï¿½
 	private String board_nickname;
-	// ´ñ±Û ¼ö
+	// ï¿½ï¿½ï¿½ ï¿½ï¿½
 	private int board_replies;
-	// °ø°³¹üÀ§
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	private String board_see;
-	// ¿øº» ÆÄÀÏ ÀÌ¸§
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½
 	private String board_fileid;
-	// ÀúÀåµÇ´Â ÆÄÀÏ ÀÌ¸§
+	// ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½
 	private String board_uploadfileid;
 	
 	public String getBoard_cost() {
@@ -43,9 +43,9 @@ public class Board {
 	}
 
 
-	// ÆÇ¸Å°¡°Ý
+	// ï¿½Ç¸Å°ï¿½ï¿½ï¿½
 	private String board_cost;
-	//°Ô½ÃÆÇ Ä«Å×°í¸®
+	//ï¿½Ô½ï¿½ï¿½ï¿½ Ä«ï¿½×°ï¿½
 	private String board_category;
 	
 	
@@ -140,13 +140,13 @@ public class Board {
 	public void setBoard_id(String board_id) {
 		this.board_id = board_id;
 	}
-	
 
 	@Override
 	public String toString() {
 		return "Board [board_num=" + board_num + ", board_title=" + board_title + ", board_content=" + board_content
 				+ ", board_date=" + board_date + ", board_id=" + board_id + ", board_hits=" + board_hits
 				+ ", board_nickname=" + board_nickname + ", board_replies=" + board_replies + ", board_see=" + board_see
-				+ ", board_fileid=" + board_fileid + ", board_uploadfileid=" + board_uploadfileid + "]";
+				+ ", board_fileid=" + board_fileid + ", board_uploadfileid=" + board_uploadfileid + ", board_cost="
+				+ board_cost + ", board_category=" + board_category + "]";
 	}
 }

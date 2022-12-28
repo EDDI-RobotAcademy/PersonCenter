@@ -79,11 +79,11 @@ public class FriendRepository {
 	}
 		
 
-	public ArrayList<String> getRequestList(String cus_id) {
+	public ArrayList<String> getRequestList(String cus_id, int board_num) {
 		fdao = sqlSession.getMapper(FriendDAO.class);
 		ArrayList<String> result = new ArrayList();
 		try {
-			result = fdao.getRequestList(cus_id);
+			result = fdao.getRequestList(cus_id, board_num);	
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -147,5 +147,93 @@ public class FriendRepository {
 		}
 		return result;
 	}
+	
+	
+	// (수정한부분) 수락하기 누르면 friend 로 바꾸고 board_num 값 넣기 
+		public int accept_2(String cus_id, String friend_id, int board_num) {
+			fdao = sqlSession.getMapper(FriendDAO.class);
+			int result = 0;
+			Map<String, Object> accept = new HashMap();
+			accept.put("cus_id", cus_id);
+			accept.put("friend_id", friend_id);
+			accept.put("board_num", board_num);
+
+			try {
+				result = fdao.accept_2(accept);
+				fdao.acceptFriend_2(accept);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return result;
+		}
+
+		// (수정한부분) 판매자, 구매자, 게시글 번호 값을 가져감 
+		public String getStatus_2(String cus_id, String friend_id, int board_num) {
+			fdao = sqlSession.getMapper(FriendDAO.class);
+			String result = "";
+			Map<String,  Object> search = new HashMap();
+			search.put("cus_id", cus_id);
+			search.put("friend_id", friend_id);
+			search.put("board_num", board_num);
+			try {
+				result = fdao.getStatus_2(search);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return result;
+		}
+
+		public int friendRequest_2(String cus_id, String friend_id, int board_num) {
+			Map<String, Object> request = new HashMap();
+			
+			request.put("cus_id", cus_id);
+			request.put("friend_id", friend_id);
+			request.put("board_num", board_num);
+			fdao = sqlSession.getMapper(FriendDAO.class);
+			int result = 0;
+		
+			try {
+				result = fdao.friendRequest_2(request);
+				fdao.friendRequestFriend_2(request);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return result;
+		}
+
+		public String getfriend_2(String login_id, int board_num) {
+			Map<String, Object> request = new HashMap();
+			
+			request.put("cus_id", login_id);
+			request.put("board_num", board_num);
+			fdao = sqlSession.getMapper(FriendDAO.class);
+			String result = "";
+			try {
+				result = fdao.getfriend_2(request);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return result;
+		}
+
+		public String getStatus_board(String cus_id, int board_num) {
+			fdao = sqlSession.getMapper(FriendDAO.class);
+			String result = "";
+			Map<String, Object> search = new HashMap();
+			search.put("cus_id", cus_id);
+			search.put("board_num", board_num);
+			try {
+				result = fdao.getStatus_board(search);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return result;
+			
+		}
 
 }

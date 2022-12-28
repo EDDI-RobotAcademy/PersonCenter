@@ -146,7 +146,7 @@
                                     <div class="na-item">
                                        <a
                                           href="${pageContext.request.contextPath}/boards_free/get?board_num=${item.board_num}&page=${page}"
-                                          class="na-subject"> <span class="rank-icon en bg-cyan">${status.count}</span>
+                                          class="na-subject"> <span class="rank-icon en bg-red">${status.count}</span>
                                           ${item.board_title}
                                        </a>
                                     </div>
@@ -183,7 +183,7 @@
                                     <div class="na-item">
                                        <a
                                           href="${pageContext.request.contextPath}/boards_data/get?board_num=${item.board_num}&page=${page}"
-                                          class="na-subject"> <span class="rank-icon en bg-pink">${status.count}</span>
+                                          class="na-subject"> <span class="rank-icon en bg-orange">${status.count}</span>
                                           ${item.board_title}
                                        </a>
                                     </div>
@@ -201,14 +201,14 @@
 
 							<!-- 위젯 시작 { -->
 							<h3 class="h3 f-lg en">
-								<a href="http://gukbbong.com/free"> <span
-									class="float-right more-plus"></span> 자유게시판
-								</a>
+								<a href="${pageContext.request.contextPath}/boards_auction"> <span
+                           class="float-right more-plus"></span> 경매게시판
+                        </a>
 							</h3>
 							<hr class="hr" />
 							<div class="mt-3 mb-4">
 								<ul class="na-list mt-n1">
-									<c:forEach var="item" items="${boards_free}" varStatus="status">
+									<c:forEach var="item" items="${auction}" varStatus="status">
 										<li class="px-3 px-sm-0">
 											<div class="na-title">
 												<div
@@ -219,8 +219,8 @@
 												</div>
 												<div class="na-item">
 													<a
-														href="${pageContext.request.contextPath}/boards_free/get?board_num=${item.board_num}&page=${page}"
-														class="na-subject"> <span class="rank-icon en bg-blue">${status.count}</span>
+														href="${pageContext.request.contextPath}/boards_auction/get?board_num=${item.board_num}&page=${page}"
+														class="na-subject"> <span class="rank-icon en bg-green">${status.count}</span>
 														${item.board_title}
 													</a>
 												</div>
@@ -771,4 +771,4 @@
 
 </body>
 </html>
-<%-- <%@ include file="./include/footer.jsp"%> --%>
+<%@ include file="/WEB-INF/views/include/footer.jsp" %>

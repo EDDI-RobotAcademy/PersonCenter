@@ -44,7 +44,6 @@ function acceptFriend(friend_id) {
 
 $(function(){
 	$('#delete').on('click', deleteBoard);
-	$('#insertReply').on('click', insertReply);
 });
 
 
@@ -54,7 +53,7 @@ function deleteBoard(){
 				method : "post",
 				url : "delete",
 				data : {
-					"board_num" : ${board.board_num}
+					"board_num" : ${auction.board_num}
 				},
 				success : function(result) {
 					if(result==1){ 
@@ -65,56 +64,9 @@ function deleteBoard(){
 			});}
 }
 function updateBoard(board_num){
-	location.href = "${pageContext.request.contextPath}/boards/update?board_num="+board_num+"&page=${page}&friend_id=${friend_id}";
+	location.href = "${pageContext.request.contextPath}/boards_auction/update?board_num="+board_num+"&page=${page}&friend_id=${friend_id}";
 }
-function insertReply(){
-	$.ajax({
-		method:"post",
-		url:"insertReply",
-		data:{
-			"board_num":${board.board_num},
-			"reply_content":$("#reply_content").val(),
-			"page": ${page}
-		},
-		success:function(board_num){
-				history.go(0);
-		}
-	});
-}
-function deleteReply(reply_num){
-		$.ajax({
-			method:"post",
-			url:"deleteReply",
-			data:{
-				"reply_num":reply_num,
-				"board_num":${board.board_num}
-			},
-			success:function(board_num){
-				alert('삭제완료!');
-				history.go(0);
-			}
-		});
-}
-function insertR_reply(reply_num){
-	$("#"+reply_num).replaceWith('<input type="text"id="r_reply_content" class="form-control" style="width:80%"> <input type="button"id="r_reply_btn" value="write reply" class="btn btn-info">');
-	$('#r_reply_btn').on('click',function(){
-		$.ajax({
-			method:"post",
-			url:"insertReply",
-			data:{
-				"reply_num":reply_num,
-				"reply_content":$("#r_reply_content").val(),
-				"board_num":${board.board_num},
-				"page": ${page}
-			},
-			success:function(board_num){
-				alert('댓글이 달렸습니다');
-				history.go(0);
-				/* location.href = "${pageContext.request.contextPath}/boards/get?board_num=" + board_num + "&page=" + page; */
-		}
-		});
-	});
-}
+
 </script>
 
 <body>
@@ -124,11 +76,11 @@ function insertR_reply(reply_num){
 				<div class="right_area">
 				
 					<!-- 작성자 본인이라면 수정, 삭제  -->
-					<c:if test="${loginid==board.board_id }">
+					<c:if test="${loginid==auction.board_id }">
 						<a href="#" role="button"
 							class="BaseButton BaseButton--skinGray size_default"> 
 							<input type="button" value="수정" id="update" name="update"
-							onclick="updateBoard('${board.board_num}')"
+							onclick="updateBoard('${auction.board_num}')"
 							class="btn btn-default">
 						</a>
 
@@ -139,7 +91,7 @@ function insertR_reply(reply_num){
 						</a>
 					</c:if>
 
-						<a href="${pageContext.request.contextPath}/boards" role="button"
+						<a href="${pageContext.request.contextPath}/boards_auction" role="button"
 						class="BaseButton BaseButton--skinGray size_default"> 
 						<input type="button" value="목록" class="btn btn-default">
 					</a>
@@ -155,7 +107,7 @@ function insertR_reply(reply_num){
 							<!---->
 							<!---->
 							<!---->
-							<h3 class="title_text">${board.board_title }</h3>
+							<h3 class="title_text">${auction.board_title }</h3>
 						</div>
 					</div>
 					<div class="WriterInfo">
@@ -167,7 +119,7 @@ function insertR_reply(reply_num){
 							<div class="profile_info">
 								<div class="nick_box">
 									<button id="writerInfodeancho0618" class="nickname">
-										${board.board_nickname }</button>
+										${auction.board_nickname }</button>
 									<!---->
 								</div>
 								<em class="nick_level"> 열심회원 <i data-v-d34938e2=""
@@ -178,9 +130,9 @@ function insertR_reply(reply_num){
 							<div class="article_info">
 
 								<span class="date"> <fmt:formatDate
-										value="${board.board_date }" pattern="yyyy-MM-dd HH:mm:ss" />
+										value="${auction.board_date }" pattern="yyyy-MM-dd HH:mm:ss" />
 
-								</span> <span class="count">조회 ${board.board_hits }</span>
+								</span> <span class="count">조회 ${auction.board_hits }</span>
 							</div>
 						</div>
 					</div>
@@ -188,7 +140,7 @@ function insertR_reply(reply_num){
 						<a href="#" role="button" class="button_comment"><svg
 								class="svg-icon ico-post-comment-323232">
 								<use xlink:href="#ico-post-comment-323232" aria-hidden="true"></use></svg>댓글
-							<strong class="num">${board.board_replies }</strong></a><a href="#" role="button"
+							<strong class="num">${auction.board_replies }</strong></a><a href="#" role="button"
 							class="button_url">URL 복사</a>
 						<div class="toast_url_copy_successful" style="display: none;">
 							URL이 복사되었습니다. 원하는 곳에 붙여 넣으세요.</div>
@@ -214,25 +166,25 @@ function insertR_reply(reply_num){
 							<div class="WarningNotice">
 							</div>
 						<!-- 사진이 비어있다면 안나오게 -->
-							<c:if test="${!empty board.board_fileid }">
+							<c:if test="${!empty auction.board_fileid }">
 								<div class="product_section">
 									<div class="ProductImage sold">
 										<div class="product_thumb">
 
 											<img
-												src="${pageContext.request.contextPath}/boards/download?board_num=${board.board_num}"
+												src="${pageContext.request.contextPath}/boards_auction/download?board_num=${auction.board_num}"
 												height="380" width="380">
 										</div>
 									</div>
 									<div class="product_area">
 										<div class="product_detail">
 											<div class="product_detail_box">
-												<div class="ProductCategory">카테고리 / ${board.board_category }</div>
+												<div class="ProductCategory">카테고리 / ${auction.board_category }</div>
 												<p class="ProductName">
-													<em class="SaleLabel sold"> [판매] </em> ${board.board_title }
+													<em class="SaleLabel sold"> [판매] </em> ${auction.board_title }
 												</p>
 												<div class="ProductPrice sold">
-													<strong class="cost">${board.board_cost }원</strong>
+													<strong class="cost">${auction.board_cost }원</strong>
 													<!---->
 												</div>
 											</div>
@@ -265,15 +217,15 @@ function insertR_reply(reply_num){
 													<c:if test="${agree =='failed'}">
 
 														<!-- 본인이 쓴 게시물이 아니라면 -->
-														<c:if test="${loginid ne board.board_id }">	
+														<c:if test="${loginid ne auction.board_id }">	
 														<!-- 다른사람과 거래중이라면 -->
 														<c:if test="${status_seller eq null && board_status eq null }">	
 																<!-- 로그인아이디  -->
 																<input type="hidden" id="friend_id" name="friend_id" value="${loginid}">
 															<form action="friendRequest" method="post" class="friend">
 																<!-- 게시글작성자아이디  -->
-																<input type="hidden" id="friend_id" name="friend_id" value="${board.board_id }">
-																<input type="hidden" id="board_num" name="board_num" value="${board.board_num }">
+																<input type="hidden" id="friend_id" name="friend_id" value="${auction.board_id }">
+																<input type="hidden" id="board_num" name="board_num" value="${auction.board_num }">
 																<button type="submit" class="btn btn-primary btn-block btn-lg en">거래신청하기</button>
 															</form>
 															</c:if>
@@ -292,7 +244,7 @@ function insertR_reply(reply_num){
 														
 														
 														<!-- 본인이 쓴 게시물이라면 -->
-														<c:if test="${loginid eq board.board_id }">
+														<c:if test="${loginid eq auction.board_id }">
 															<!-- 거래요청을 보낸상태라면  -->
 															<c:if test="${!empty request}">
 																<table cellpadding="10">
@@ -303,15 +255,15 @@ function insertR_reply(reply_num){
 																	<c:forEach var="items" items="${request}">
 																		<tr>
 																			<td><a
-																				href="${pageContext.request.contextPath}/boards?friend_id=${items}">${items}</a></td>
+																				href="${pageContext.request.contextPath}/boards_auction?friend_id=${items}">${items}</a></td>
 																			<td>
-																			<input type="hidden" id="board_num" name="board_num" value="${board.board_num }">
+																			<input type="hidden" id="board_num" name="board_num" value="${auction.board_num }">
 																			<input type="button" onClick="acceptFriend('${items}')" value="수락하기" class="btn btn-default"></td>
 																		</tr>
 																	</c:forEach>
 																</table>
 												
-															  	 <input type="hidden" id="friend_id" name="friend_id" value="${board.board_id }"><br>	
+															  	 <input type="hidden" id="friend_id" name="friend_id" value="${auction.board_id }"><br>	
 																 <input type="hidden" id="friend_id" name="friend_id" value="${request}">
 															</c:if>
 														</c:if>
@@ -377,7 +329,7 @@ function insertR_reply(reply_num){
 									src="https://ssl.pstatic.net/static/cafe/cafe_pc/default/cafe_profile_77.png?type=c77_77"
 									alt="프로필 사진" width="36" height="36"
 									onerror="this.onerror='';this.src='https://ssl.pstatic.net/static/cafe/cafe_pc/default/cafe_profile_77.png';"></span><span
-								class="box"><strong class="user">${board.board_nickname }</strong>님의
+								class="box"><strong class="user">${auction.board_nickname }</strong>님의
 									게시글 더보기 <svg class="svg-icon ico-post-arrow-323232">
 										<use xlink:href="#ico-post-arrow-323232" aria-hidden="true"></use></svg></span></a>
 						</div>

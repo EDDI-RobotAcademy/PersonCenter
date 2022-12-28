@@ -106,7 +106,7 @@
 								href="${pageContext.request.contextPath}/boards_data"
 								target="_self"> <span class="me-a text-nowrap f-md en px-4">
 
-										정보공유 </span>
+										정보게시판 </span>
 							</a></li>
 
 							<li class="col p-0 me-li"><a class="d-block bg-primary"
@@ -117,10 +117,10 @@
 							</a></li>
 							
 							<li class="col p-0 me-li"><a class="d-block bg-primary"
-								href="${pageContext.request.contextPath}/boards_video"
+								href="${pageContext.request.contextPath}/boards_auction"
 								target="_self"> <span class="me-a text-nowrap f-md en px-4">
 
-										 영상공유 </span>
+										경매게시판 </span>
 							</a></li>
 
 							<li class="col p-0 me-li"><a class="dropdown-toggle"
@@ -138,7 +138,7 @@
 										href="${path}/message/management?category=sent">메세지보내기 <span
 											class="w3-badge">${numofFriendRequest}</span>
 									</a></li>
-
+									
 								</ul></li>
 
 							<!-- 관리자라면 -->

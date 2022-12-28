@@ -24,28 +24,29 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.gun.board.repository.BoardRepository;
+import com.gun.board.repository.AuctionRepository;
 import com.gun.board.repository.CustomerRepository;
 import com.gun.board.repository.FriendRepository;
 import com.gun.board.repository.ReplyRepository;
 import com.gun.board.util.Configuration;
 import com.gun.board.util.FileService;
-import com.gun.board.util.Pagination;
-import com.gun.board.vo.Board;
+import com.gun.board.util.Pagination_Auction;
+import com.gun.board.vo.Auction;
 import com.gun.board.vo.Customer;
+import com.gun.board.vo.Free;
 import com.gun.board.vo.Reply;
 
-@RequestMapping(value = "/boards")
+@RequestMapping(value = "/boards_auction")
 @Controller
-public class BoardController {
+public class AuctionController {
 
-	private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
+	private static final Logger logger = LoggerFactory.getLogger(AuctionController.class);
 
 	@Inject
 	HttpSession session;
 
 	@Inject
-	BoardRepository bRepository;
+	AuctionRepository aRepository;
 
 	@Inject
 	ReplyRepository rRepository;
@@ -56,7 +57,7 @@ public class BoardController {
 	@Inject
 	FriendRepository fRepository;
 
-	Pagination Pagination = new Pagination();
+	Pagination_Auction Paginationa = new Pagination_Auction();
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String getBoards(Model model, @RequestParam(value = "page", defaultValue = "1") int page,
@@ -75,70 +76,70 @@ public class BoardController {
 			}
 		}
 
-		ArrayList<Board> boards = bRepository.getBoards(friend_id);
-		int totalPages = Pagination.totalPages(boards);
-		page = Pagination.getCurrentPage(page, totalPages);
-		boards = Pagination.totalPosts(boards, page);
-		int endPage = Pagination.endPage(page, totalPages);
-		logger.info("총 페이지: " + totalPages + ", 끝페이지 :  " + endPage + " 현재페이지 :  " + page + " 게시물 수 : " + boards.size()
+		ArrayList<Auction> auction = aRepository.getBoards(friend_id);
+		int totalPages = Paginationa.totalPages(auction);
+		page = Paginationa.getCurrentPage(page, totalPages);
+		auction = Paginationa.totalPosts(auction, page);
+		int endPage = Paginationa.endPage(page, totalPages);
+		logger.info("총 페이지: " + totalPages + ", 끝페이지 :  " + endPage + " 현재페이지 :  " + page + " 게시물 수 : " + auction.size()
 				+ " status: " + (String) session.getAttribute("status"));
-		model.addAttribute("boards", boards);
+		model.addAttribute("auction", auction);
 		model.addAttribute("page", page);
 		model.addAttribute("endPage", endPage);
 		model.addAttribute("friend_id", friend_id);
 		System.out.println("friend_id =" + friend_id);
-		return "boards/home";
+		return "boards_auction/a_home";
 	}
 
 	@RequestMapping(value = "/insert", method = RequestMethod.GET)
 	public String insertBoard() {
 		logger.info("글 작성 화면으로 이동");
-		return "boards/insert";
+		return "boards_auction/a_insert";
 	}
 
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
-	public String insertBoard(Board board, MultipartFile upload, Model model) {
+	public String insertBoard(Auction auction, MultipartFile upload, Model model) {
 		System.out.println("upload 파일명: " + upload);
 		String board_id = (String) session.getAttribute("loginid");
 		String board_nickname = cRepository.selectNickname(board_id);
-		board.setBoard_id(board_id);
-		board.setBoard_nickname(board_nickname);
-		bRepository.insertBoard(board);
+		auction.setBoard_id(board_id);
+		auction.setBoard_nickname(board_nickname);
+		aRepository.insertBoard(auction);
 		if (!upload.isEmpty()) {
 			System.out.println("upload file's name: " + upload.getOriginalFilename());
 			String board_uploadfileid = FileService.saveFile(upload, Configuration.PHOTOPATH);
-			board.setBoard_fileid(upload.getOriginalFilename());
-			board.setBoard_uploadfileid(board_uploadfileid);
-			bRepository.insertPhoto(board);
+			auction.setBoard_fileid(upload.getOriginalFilename());
+			auction.setBoard_uploadfileid(board_uploadfileid);
+			aRepository.insertPhoto(auction);
 		}
 		String friend_id = (String) session.getAttribute("loginid");
 		int page = 1;
-		ArrayList<Board> boards = bRepository.getBoards(friend_id);
-		int totalPages = Pagination.totalPages(boards);
-		page = Pagination.getCurrentPage(page, totalPages);
-		boards = Pagination.totalPosts(boards, page);
-		int endPage = Pagination.endPage(page, totalPages);
-		model.addAttribute("boards", boards);
+		ArrayList<Auction> auctions = aRepository.getBoards(friend_id);
+		int totalPages = Paginationa.totalPages(auctions);
+		page = Paginationa.getCurrentPage(page, totalPages);
+		auctions = Paginationa.totalPosts(auctions, page);
+		int endPage = Paginationa.endPage(page, totalPages);
+		model.addAttribute("auction", auctions);
 		model.addAttribute("page", page);
 		model.addAttribute("endPage", endPage);
 		model.addAttribute("friend_id", friend_id);
-		return "boards/home";
+		return "boards_auction/a_home";
 	}
 
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
 	public String getBoard(Model model, int page, String friend_id, int board_num) {
 		String loginid = (String) session.getAttribute("loginid");
 
-		Board board = bRepository.getBoard(board_num);
+		Auction auction = aRepository.getBoard(board_num);
 		
 		// 작성자는 자신이 작성한 글의 조회수를 올리지 못한다
-		if (!loginid.equals(board.getBoard_id())) {
-			bRepository.upHits(board_num);
-			board = bRepository.getBoard(board_num);
+		if (!loginid.equals(auction.getBoard_id())) {
+			aRepository.upHits(board_num);
+			auction = aRepository.getBoard(board_num);
 		}
 		
 		// 판매자와 구매자 정보를 가져온다
-		String seller = board.getBoard_id();
+		String seller = auction.getBoard_id();
 		String buyer = fRepository.getfriend_2(loginid, board_num);
 
 		// 판매자와 구매자 거래가 성립되었는지 아닌지 상태를 저장해준다.
@@ -179,24 +180,24 @@ public class BoardController {
 		
 		model.addAttribute("board_status", board_status);
 		model.addAttribute("request", request);
-		model.addAttribute("board", board);
+		model.addAttribute("auction", auction);
 		model.addAttribute("page", page);
 		model.addAttribute("friend_id", friend_id);
 		model.addAttribute("seller_info", seller_info);
 		model.addAttribute("buyer_info", buyer_info);
 		model.addAttribute("reply", reply);
-		logger.info("게시판정보 : " + board);
+		logger.info("게시판정보 : " + auction);
 
-		return "boards/get";
+		return "boards_auction/a_get";
 	}
 
 	@RequestMapping(value = "/download", method = RequestMethod.GET)
 	public String download(int board_num, HttpServletResponse response) {
 
-		Board board = bRepository.getBoard(board_num);
+		Auction auction = aRepository.getBoard(board_num);
 
-		String originalfile = board.getBoard_fileid();
-		System.out.println("파일아이디 : " + board.getBoard_fileid());
+		String originalfile = auction.getBoard_fileid();
+		System.out.println("파일아이디 : " + auction.getBoard_fileid());
 
 		try {
 			response.setHeader("Content-Disposition",
@@ -206,7 +207,7 @@ public class BoardController {
 			e.printStackTrace();
 		}
 
-		String fullpath = Configuration.PHOTOPATH + "/" + board.getBoard_uploadfileid();
+		String fullpath = Configuration.PHOTOPATH + "/" + auction.getBoard_uploadfileid();
 
 		ServletOutputStream fileout = null;
 		FileInputStream filein = null;
@@ -263,7 +264,7 @@ public class BoardController {
 			rRepository.updateRReply_num(reply_num);
 		}
 		// 0 : 댓글추가
-		bRepository.changeReply(board_num, 0);
+		aRepository.changeReply(board_num, 0);
 		logger.info("댓글 작성 결과 : " + result);
 		return board_num;
 	}
@@ -272,7 +273,7 @@ public class BoardController {
 	public @ResponseBody int deleteReply(int reply_num, int board_num) {
 		int result = rRepository.deleteReply(reply_num);
 		// 1 : 댓글 삭제
-		bRepository.changeReply(board_num, 1);
+		aRepository.changeReply(board_num, 1);
 		logger.info("댓글 삭제 결과 : " + result);
 		return board_num;
 	}
@@ -288,12 +289,12 @@ public class BoardController {
 
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	public @ResponseBody int deleteBoard(Model model, int board_num) {
-		Board board = bRepository.getBoard(board_num);
+		Auction auction = aRepository.getBoard(board_num);
 		boolean fileDeleteResult = false;
-		if (board.getBoard_uploadfileid() != null) {
-			fileDeleteResult = FileService.deleteFile(Configuration.PHOTOPATH + "/" + board.getBoard_uploadfileid());
+		if (auction.getBoard_uploadfileid() != null) {
+			fileDeleteResult = FileService.deleteFile(Configuration.PHOTOPATH + "/" + auction.getBoard_uploadfileid());
 		}
-		int result = bRepository.deleteBoard(board_num);
+		int result = aRepository.deleteBoard(board_num);
 		logger.info("글 삭제 : " + result + " , " + fileDeleteResult);
 		return result;
 	}
@@ -313,25 +314,25 @@ public class BoardController {
 
 	@RequestMapping(value = "/update", method = RequestMethod.GET)
 	public String updateBoard(int board_num, Model model, int page, String friend_id) {
-		Board board = bRepository.getBoard(board_num);
+		Auction auction = aRepository.getBoard(board_num);
 		String loginid = (String) session.getAttribute("loginid");
-		if (board.getBoard_fileid() != null) {
-			FileService.deleteFile(board.getBoard_uploadfileid());
+		if (auction.getBoard_fileid() != null) {
+			FileService.deleteFile(auction.getBoard_uploadfileid());
 		}
 		model.addAttribute("page", page);
 		model.addAttribute("friend_id", friend_id);
-		if (board.getBoard_id().equals(loginid)) {
+		if (auction.getBoard_id().equals(loginid)) {
 			// 글쓴사람이랑 로그인한 사람이 같을 때만 업뎃이 가능하게
-			model.addAttribute("board", board);
-			return "boards/update";
+			model.addAttribute("auction", auction);
+			return "boards_auction/a_update";
 		}
-		return "boards/home";
+		return "boards_auction/a_home";
 	}
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String updateBoard(int board_num, Board board, int page, String friend_id, Model model,
+	public String updateBoard(int board_num, Auction auction, int page, String friend_id, Model model,
 			MultipartFile upload) {
-		Board originalBoard = bRepository.getBoard(board_num);
+		Auction originalBoard = aRepository.getBoard(board_num);
 		String board_fileid = "";
 		String board_uploadfileid = "";
 		if (originalBoard.getBoard_fileid() != null) {
@@ -347,21 +348,21 @@ public class BoardController {
 			System.out.println("after adjustment: " + board_uploadfileid);
 		}
 		if (originalBoard.getBoard_fileid() != null || upload.getOriginalFilename() != null) {
-			board.setBoard_fileid(board_fileid);
-			board.setBoard_uploadfileid(board_uploadfileid);
+			auction.setBoard_fileid(board_fileid);
+			auction.setBoard_uploadfileid(board_uploadfileid);
 		}
-		int result = bRepository.updateBoard(board);
-		logger.info("글 수정 결과: " + board.toString());
-		ArrayList<Board> boards = bRepository.getBoards(friend_id);
-		int totalPages = Pagination.totalPages(boards);
-		page = Pagination.getCurrentPage(page, totalPages);
-		boards = Pagination.totalPosts(boards, page);
-		int endPage = Pagination.endPage(page, totalPages);
-		model.addAttribute("boards", boards);
+		int result = aRepository.updateBoard(auction);
+		logger.info("글 수정 결과: " + auction.toString());
+		ArrayList<Auction> boards = aRepository.getBoards(friend_id);
+		int totalPages = Paginationa.totalPages(boards);
+		page = Paginationa.getCurrentPage(page, totalPages);
+		boards = Paginationa.totalPosts(boards, page);
+		int endPage = Paginationa.endPage(page, totalPages);
+		model.addAttribute("auction", auction);
 		model.addAttribute("page", page);
 		model.addAttribute("endPage", endPage);
 		model.addAttribute("friend_id", friend_id);
-		return "boards/home";
+		return "boards_auction/a_home";
 	}
 
 	@RequestMapping(value = "/friendRequest", method = RequestMethod.POST)
@@ -421,19 +422,64 @@ public class BoardController {
 			}
 		}
 
-		ArrayList<Board> boards = bRepository.getBoards(friend_id);
-		int totalPages = Pagination.totalPages(boards);
-		page = Pagination.getCurrentPage(page, totalPages);
-		boards = Pagination.totalPosts(boards, page);
-		int endPage = Pagination.endPage(page, totalPages);
-		logger.info("총 페이지: " + totalPages + ", 끝페이지 :  " + endPage + " 현재페이지 :  " + page + " 게시물 수 : " + boards.size()
+		ArrayList<Auction> auction = aRepository.getBoards(friend_id);
+		int totalPages = Paginationa.totalPages(auction);
+		page = Paginationa.getCurrentPage(page, totalPages);
+		auction = Paginationa.totalPosts(auction, page);
+		int endPage = Paginationa.endPage(page, totalPages);
+		logger.info("총 페이지: " + totalPages + ", 끝페이지 :  " + endPage + " 현재페이지 :  " + page + " 게시물 수 : " + auction.size()
 				+ " status: " + (String) session.getAttribute("status"));
-		model.addAttribute("boards", boards);
+		model.addAttribute("auction", auction);
 		model.addAttribute("page", page);
 		model.addAttribute("endPage", endPage);
 		model.addAttribute("friend_id", friend_id);
 		System.out.println("friend_id =" + friend_id);
-		return "boards/home";
+		return "boards_auction/a_home";
 	}
-
+	
+	@RequestMapping(value = "/findauction", method = RequestMethod.POST)
+	   public String findauction(Model model, @RequestParam(value = "searchType", defaultValue = "" ) String searchType,
+	         @RequestParam(value = "searchContent", defaultValue = "") String searchContent) {
+	      
+	      int page = 1;
+	      int result = 0;
+	      ArrayList<Auction> findAuction = new ArrayList();
+	      findAuction = aRepository.findauction(searchType, searchContent);
+	      int totalPages = Paginationa.totalPages(findAuction);
+	      page = Paginationa.getCurrentPage(page, totalPages);
+	      findAuction = Paginationa.totalPosts(findAuction, page);
+	      int endPage = Paginationa.endPage(page, totalPages);
+	      
+	      logger.info("searchType: " + searchType + ", searchContent: " + searchContent + " , " + findAuction.size());
+	      System.out.println("searchType: " + searchType + ", searchContent: " + searchContent + " , " + findAuction.size());
+	      System.out.println("searchFree : " + findAuction);
+	      
+	      model.addAttribute("auction", findAuction);
+	      model.addAttribute("page", page);
+	      model.addAttribute("endPage", endPage);
+	      
+	      result = findAuction.size();
+	      return "boards_auction/a_home";
+	   }
+	   
+	   // �옄�쑀寃뚯떆�뙋 �젙�젹
+	   @RequestMapping(value ="/SortAuction", method = RequestMethod.GET)
+	   public  String SortAuction(String sortValue, Model model) {   
+	 
+	      System.out.println("�옄�쑀寃뚯떆�뙋 �젙�젹 �릱�굹~?~!? @@ sortValue : " + sortValue);
+	      ArrayList<Auction> auction = aRepository.getSort(sortValue);
+	      
+	      int page = 1;
+	     
+	     int totalPages = Paginationa.totalPages(auction);
+	     page = Paginationa.getCurrentPage(page, totalPages);
+	     auction = Paginationa.totalPosts(auction, page);
+	     int endPage = Paginationa.endPage(page, totalPages);
+	     
+	     model.addAttribute("page", page);
+	     model.addAttribute("endPage", endPage);
+	     model.addAttribute("auction", auction);
+	     
+	        return "boards_auction/a_home";
+	   }
 }

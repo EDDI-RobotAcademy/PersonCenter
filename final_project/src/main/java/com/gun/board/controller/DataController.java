@@ -300,12 +300,12 @@ public class DataController {
 		}
 		int result = dRepository.updateBoards_data(data);
 		logger.info("湲� �닔�젙 寃곌낵: " + data.toString());
-		ArrayList<Data> bdata = dRepository.getData(friend_id);
-		int totalPages = Paginationd.totalPages(bdata);
+		ArrayList<Data> boards_data = dRepository.getData(friend_id);
+		int totalPages = Paginationd.totalPages(boards_data);
 		page = Paginationd.getCurrentPage(page, totalPages);
-		bdata = Paginationd.totalPosts(bdata, page);
+		boards_data = Paginationd.totalPosts(boards_data, page);
 		int endPage = Paginationd.endPage(page, totalPages);
-		model.addAttribute("data", bdata);
+		model.addAttribute("data", data);
 		model.addAttribute("page", page);
 		model.addAttribute("endPage", endPage);
 		model.addAttribute("friend_id", friend_id);

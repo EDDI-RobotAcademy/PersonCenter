@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gun.board.dao.AuctionDAO">
+	<insert id="insertBoard">
+		insert into
+		board_auction(board_num, board_title,
+		board_content, board_id, board_nickname, board_cost, board_see)
+		values(
+		BOARD_AUCTION_SEQ.NEXTVAL, #{board_title},
+		#{board_content}, #{board_id},
+		#{board_nickname},#{board_cost},#{board_see}
+		)
+	</insert>
+
+	<insert id="insertPhoto">
+		insert into board_file_auction(board_num,
+		board_fileid,board_uploadfileid)
+		values(
+		(select max(board_num) from
+		board_auction),#{board_fileid},#{board_uploadfileid}
+		)
+	</insert>
+	<!-- 게시글 조회 (기존) -->
+	<select id="getBoards" resultType="Auction" parameterType="Map">
+		<!--s elect * from board where board_id=#{friend_id} order by board_date 
+			desc -->
+		select * from board_auction left join board_file_auction on
+		board_auction.board_num=board_file_auction.board_num
+		where board_auction.board_id=#{friend_id}
+		order by board_auction.board_date desc
+	</select>
+	<!-- 거래 게시판 조회 (추가) -->
+	<select id="getTransaction" resultType="Auction"
+		parameterType="Map">
+		select * from board_auction left join board_file_auction on
+		board_auction.board_num=board_file_auction.board_num
+		where board_auction.board_category=#{transaction_name}
+		order by board_auction.board_date desc
+	</select>
+
+	<select id="getTransaction_0" resultType="Auction"
+		parameterType="Map">
+		select * from board_auction left join board_file_auction on
+		board_auction.board_num=board_file.board_num
+		order by board_auction.board_date desc
+	</select>
+
+	<!-- home에 적용될 자유 게시판 출력화면(7개짜리) -->
+   <select id="getAuction_home" resultType="Auction" parameterType="Map">
+   select * from board_auction order by board_auction.board_date desc
+   </select>
+
+
+	<!-- 게시글 하나 조회 -->
+	<select id="getBoard" resultType="Auction">
+		select*from board_auction left join
+		board_file_auction on board_auction.board_num=board_file_auction.board_num
+		where
+		board_auction.board_num=#{board_num}
+	</select>
+
+	<update id="upHits">
+		update board_auction set board_hits=board_hits+1
+		where
+		board_num=#{board_num}
+	</update>
+
+	<delete id="deleteBoard">
+		delete from board_auction where board_num=#{board_num}
+	</delete>
+
+	<update id="updateBoard">
+		update board_auction set board_title=#{board_title},
+		board_content=#{board_content},
+		board_cost=#{board_cost},
+		board_see=#{board_see},
+		board_category=#{board_category}
+		where
+		board_num=#{board_num}
+	</update>
+
+	<update id="updatePhoto">
+		update board_file_auction set board_fileid=#{board_fileid},
+		board_uploadfileid=#{board_uploadfileid}
+		where board_num=#{board_num}
+	</update>
+
+	<update id="changeReply">
+		<choose>
+			<when test="type==0">
+				update board_auction
+				set board_replies=board_replies+1
+				where
+				board_num=#{board_num}
+			</when>
+			<when test="type==1">
+				update board_auction
+				set board_replies=board_replies-1
+				where
+				board_num=#{board_num}
+			</when>
+		</choose>
+	</update>
+	
+	<select id="findauction" parameterType="Map" resultType="Auction">
+        select * from board_auction
+      <choose>
+
+         <when test="searchType=='board_title'">
+            where board_title like
+            '%' || #{searchContent} || '%'
+            order by board_auction.board_date desc
+         </when>
+         <when test="searchType=='board_content'">
+            where board_content like
+            '%' || #{searchContent} || '%'
+            order by board_auction.board_date desc
+         </when>
+         <when test="searchType=='board_nickname'">
+            where board_nickname like
+            '%' || #{searchContent} || '%'
+            order by board_auction.board_date desc
+         </when>
+         <when test="searchType=='all'">
+            where board_nickname like
+            '%' || #{searchContent} || '%'
+            or
+            board_title like
+            '%' || #{searchContent} || '%'
+            or
+            board_content like
+            '%' || #{searchContent} || '%' 
+            order by board_auction.board_date desc
+         </when>
+      </choose> 
+   </select>
+   
+   <select id="getSort" parameterType="Map" resultType="Auction">
+         select * from board_auction
+         <choose>
+            <when test="sortValue=='new'">
+                ORDER BY board_date DESC
+            </when>
+            
+            <when test="sortValue=='count'">
+                ORDER BY board_hits DESC
+            </when>
+            
+            <when test="sortValue=='title'">
+                ORDER BY board_title ASC
+            </when>
+         </choose>
+   </select>
+</mapper>

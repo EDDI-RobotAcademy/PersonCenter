@@ -1,5 +1,6 @@
 eclipse.preferences.version=1
 encoding//src/main/java/com/gun/board/controller/AdminController.java=UTF-8
+encoding//src/main/java/com/gun/board/controller/AuctionController.java=UTF-8
 encoding//src/main/java/com/gun/board/controller/BoardController.java=UTF-8
 encoding//src/main/java/com/gun/board/controller/CustomerController.java=UTF-8
 encoding//src/main/java/com/gun/board/controller/DataController.java=UTF-8

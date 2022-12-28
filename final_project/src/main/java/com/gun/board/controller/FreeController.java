@@ -83,7 +83,7 @@ public class FreeController {
       page = Paginationfr.getCurrentPage(page, totalPages);
       boards_free = Paginationfr.totalPosts(boards_free, page);
       int endPage = Paginationfr.endPage(page, totalPages);
-      logger.info("珥� �럹�씠吏� : " + totalPages + ", �걹 �럹�씠吏� :  " + endPage + "�쁽�옱 �럹�씠吏� :  " + page + "寃뚯떆臾� �닔 : " + boards_free.size()
+      logger.info("총 페이지: " + totalPages + ", 끝페이지 : " + endPage + "현재페이지 :  " + page + "게시물 수 : " + boards_free.size()
             + " status: " + (String) session.getAttribute("status"));
       model.addAttribute("free", boards_free);
       model.addAttribute("page", page);
@@ -304,13 +304,13 @@ public class FreeController {
          free.setBoard_uploadfileid(board_uploadfileid);
       }
       int result = frRepository.updateBoards_free(free);
-      logger.info("글 수정 결과 : " + free.toString());
-      ArrayList<Free> bfree = frRepository.getFree(friend_id);
-      int totalPages = Paginationfr.totalPages(bfree);
+      logger.info("湲� �닔�젙 寃곌낵 : " + free.toString());
+      ArrayList<Free> boards_free = frRepository.getFree(friend_id);
+      int totalPages = Paginationfr.totalPages(boards_free);
       page = Paginationfr.getCurrentPage(page, totalPages);
-      bfree = Paginationfr.totalPosts(bfree, page);
+      boards_free = Paginationfr.totalPosts(boards_free, page);
       int endPage = Paginationfr.endPage(page, totalPages);
-      model.addAttribute("free", bfree);
+      model.addAttribute("free", free);
       model.addAttribute("page", page);
       model.addAttribute("endPage", endPage);
       model.addAttribute("friend_id", friend_id);

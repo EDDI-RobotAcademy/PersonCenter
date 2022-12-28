@@ -11,13 +11,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.gun.board.repository.AuctionRepository;
 import com.gun.board.repository.BoardRepository;
 import com.gun.board.repository.DataRepository;
 import com.gun.board.repository.FreeRepository;
 import com.gun.board.repository.NoticeRepository;
 import com.gun.board.util.Pagination;
+import com.gun.board.util.Pagination_Auction;
 import com.gun.board.util.Pagination_Data;
 import com.gun.board.util.Pagination_Free;
+import com.gun.board.vo.Auction;
 import com.gun.board.vo.Board;
 import com.gun.board.vo.Data;
 import com.gun.board.vo.Free;
@@ -42,10 +46,14 @@ public class HomeController {
 	
 	@Inject
 	DataRepository dRepository;
+	
+	@Inject
+	AuctionRepository aRepository;
 
 	Pagination Pagination = new Pagination();
 	Pagination_Free Paginationf = new Pagination_Free();
 	Pagination_Data Paginationd = new Pagination_Data();
+	Pagination_Auction Paginationa = new Pagination_Auction();
 
 	// 홈으로
 	@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -74,6 +82,11 @@ public class HomeController {
 		ArrayList<Data> data = dRepository.getData_home();
 		data = Paginationd.totalPosts_home_data(data, page);
 		model.addAttribute("boards_data", data);
+		
+		// 경매게시판
+		ArrayList<Auction> auction = aRepository.getAuction_home();
+		auction = Paginationa.totalPosts_home(auction, page);
+		model.addAttribute("auction", auction);
 		
 		return "home";
 	}
