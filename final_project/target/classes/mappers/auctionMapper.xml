@@ -29,6 +29,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			desc -->
 		select * from board_auction left join board_file_auction on
 		board_auction.board_num=board_file_auction.board_num
+		where board_auction.board_id=#{friend_id}
 		order by board_auction.board_date desc
 	</select>
 	<!-- 거래 게시판 조회 (추가) -->

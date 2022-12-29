@@ -59,7 +59,7 @@ function deleteBoard(){
 				success : function(result) {
 					if(result==1){ 
 					alert('게시물이 성공적으로 삭제되었습니다.');
-					location.href ="${pageContext.request.contextPath}/boards";
+					history.go(0);
 					}
 				}
 			});}

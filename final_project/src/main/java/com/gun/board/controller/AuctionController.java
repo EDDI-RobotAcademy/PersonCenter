@@ -32,7 +32,6 @@ import com.gun.board.util.Configuration;
 import com.gun.board.util.FileService;
 import com.gun.board.util.Pagination_Auction;
 import com.gun.board.vo.Auction;
-import com.gun.board.vo.Board;
 import com.gun.board.vo.Customer;
 import com.gun.board.vo.Free;
 import com.gun.board.vo.Reply;
@@ -366,57 +365,44 @@ public class AuctionController {
 		return "boards_auction/a_home";
 	}
 
-	//클릭시 호출되는 문자
-	@RequestMapping(value = "/applicantRequest", method = RequestMethod.GET)
-	public String applicant(Model model, int board_num, HttpServletResponse response) throws IOException  {
-
-		response.setContentType("text/html; charset=UTF-8");
-		PrintWriter out = response.getWriter();
-
-		Auction board = aRepository.getBoard(board_num);
-		String loginid = (String) session.getAttribute("loginid");
-		System.out.println("======================이거나와야함1 ===============");
-		for (int i = 1; i < 11; i++) {
-			String n = "board.getBoard_name_" + i + "()";
-			if (loginid == n) {// 미신청자
-				System.out.println("======================이거나와야함2 ===============");
-
-			}
-		}
-		
-		for (int i = 1; i < 11; i++) {
-			String n = "loginid == board.getBoard_name_" + i + "()";
-			if (loginid == n) {// 미신청자
-				logger.info("경매 신청 : " + loginid);
-				out.println("<script>" + "alert('경매 신청 완료되었습니다.');" + "history.go(-1);" + "</script>");
-				out.flush();
-			}
-		}
-
-
-		return "home";
-	}	
-	
 	@RequestMapping(value = "/friendRequest", method = RequestMethod.POST)
-	public String friendRequest(String friend_id, Model model,
+	public String friendRequest(String friend_id, Model model,int board_num,
 			@RequestParam(value = "searchType", defaultValue = "") String searchType,
-			@RequestParam(value = "searchContent", defaultValue = "") String searchContent) {
+			@RequestParam(value = "searchContent", defaultValue = "") String searchContent,
+			HttpServletResponse response,
+			HttpServletRequest request) throws IOException {
+		
 		String cus_id = (String) session.getAttribute("loginid");
-		String checkRelationship = fRepository.getStatus(cus_id, friend_id);
+		String checkRelationship = fRepository.getStatus_2(cus_id, friend_id, board_num);
+		
+		response.setContentType("text/html; charset=UTF-8"); 
+		PrintWriter out = response.getWriter(); 
+		 
 		if (checkRelationship == null) {
-			int result = fRepository.friendRequest(cus_id, friend_id);
+			int result = fRepository.friendRequest_2(cus_id, friend_id,board_num);
 			logger.info("친구 추가 : " + result);
-			model.addAttribute("requestResult", friend_id + "님에게 거래 요청을 전송하였습니다");
+			out.println("<script>" + "alert('거래요청을 보냈습니다.');"+ "history.go(-1);"+ "</script>"); 
+			out.flush();
+			
 		} else if (checkRelationship.equals("request")) {
-			model.addAttribute("requestResult", friend_id + "님에게 이미 거래 요청을 전송하였습니다.");
+			out.println("<script>" + "alert('님에게 이미 거래 요청을 전송하였습니다.');"+ "history.go(-1);"+ "</script>"); 
+			out.flush();
+			
 		} else if (checkRelationship.equals("friend")) {
-			model.addAttribute("requestResult", friend_id + "거래수락 상태입니다.");
+			out.println("<script>" + "alert('거래수락상태입니다.');"+ "history.go(-1);"+ "</script>"); 
+			out.flush();
 		}
 		model.addAttribute("searchType", searchType);
 		model.addAttribute("searchContent", searchContent);
 		ArrayList<Customer> friends = fRepository.findFriends(searchType, searchContent);
 		model.addAttribute("friends", friends);
-		return "friend/home";
+		
+		System.out.println(checkRelationship);
+		 //페이지 새로고침
+	
+
+	
+		return null;
 	}
 
 	@RequestMapping(value = "home", method = RequestMethod.GET)

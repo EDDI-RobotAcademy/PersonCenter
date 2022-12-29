@@ -74,25 +74,25 @@ function updateBoard(board_num){
 		<div class="nt-container px-0 px-sm-4 px-xl-0 pt-0 pt-sm-4">
 			<div class="ArticleTopBtns">
 				<div class="right_area">
-
+				
 					<!-- 작성자 본인이라면 수정, 삭제  -->
 					<c:if test="${loginid==auction.board_id }">
 						<a href="#" role="button"
-							class="BaseButton BaseButton--skinGray size_default"> <input
-							type="button" value="수정" id="update" name="update"
+							class="BaseButton BaseButton--skinGray size_default"> 
+							<input type="button" value="수정" id="update" name="update"
 							onclick="updateBoard('${auction.board_num}')"
 							class="btn btn-default">
 						</a>
 
 						<a href="#" role="button"
-							class="BaseButton BaseButton--skinGray size_default"> <input
-							type="button" value="삭제" id="delete" name="delete"
+							class="BaseButton BaseButton--skinGray size_default"> 
+							<input type="button" value="삭제" id="delete" name="delete"
 							class="btn btn-default">
 						</a>
 					</c:if>
 
-					<a href="${pageContext.request.contextPath}/boards_auction"
-						role="button" class="BaseButton BaseButton--skinGray size_default">
+						<a href="${pageContext.request.contextPath}/boards_auction" role="button"
+						class="BaseButton BaseButton--skinGray size_default"> 
 						<input type="button" value="목록" class="btn btn-default">
 					</a>
 				</div>
@@ -140,8 +140,8 @@ function updateBoard(board_num){
 						<a href="#" role="button" class="button_comment"><svg
 								class="svg-icon ico-post-comment-323232">
 								<use xlink:href="#ico-post-comment-323232" aria-hidden="true"></use></svg>댓글
-							<strong class="num">${auction.board_replies }</strong></a><a href="#"
-							role="button" class="button_url">URL 복사</a>
+							<strong class="num">${auction.board_replies }</strong></a><a href="#" role="button"
+							class="button_url">URL 복사</a>
 						<div class="toast_url_copy_successful" style="display: none;">
 							URL이 복사되었습니다. 원하는 곳에 붙여 넣으세요.</div>
 						<div class="more_area">
@@ -163,8 +163,9 @@ function updateBoard(board_num){
 					<!---->
 					<div class="article_viewer">
 						<div class="SaleInfo">
-							<div class="WarningNotice"></div>
-							<!-- 사진이 비어있다면 안나오게 -->
+							<div class="WarningNotice">
+							</div>
+						<!-- 사진이 비어있다면 안나오게 -->
 							<c:if test="${!empty auction.board_fileid }">
 								<div class="product_section">
 									<div class="ProductImage sold">
@@ -178,11 +179,9 @@ function updateBoard(board_num){
 									<div class="product_area">
 										<div class="product_detail">
 											<div class="product_detail_box">
-												<div class="ProductCategory">카테고리 /
-													${auction.board_category }</div>
+												<div class="ProductCategory">카테고리 / ${auction.board_category }</div>
 												<p class="ProductName">
-													<em class="SaleLabel sold"> [판매] </em>
-													${auction.board_title }
+													<em class="SaleLabel sold"> [판매] </em> ${auction.board_title }
 												</p>
 												<div class="ProductPrice sold">
 													<strong class="cost">${auction.board_cost }원</strong>
@@ -212,12 +211,91 @@ function updateBoard(board_num){
 												</div>
 												<div class="CommercialDetailSellerInfo section"></div>
 												<div class="form-group">
-													<a
-														href="${pageContext.request.contextPath}/boards_auction/applicantRequest?board_num=${board.board_num}">거래신청하기2</a>
-													<input type="hidden" id="board_num" name="board_num"
-														value="${board.board_num }">
-													<button type="submit"
-														class="btn btn-primary btn-block btn-lg en">거래신청하기11</button>
+												
+											 		<!-- 다른사람이 쓴 글 보기 -->
+													<!-- 만약 friend가 아니라면 -->
+													<c:if test="${agree =='failed'}">
+
+														<!-- 본인이 쓴 게시물이 아니라면 -->
+														<c:if test="${loginid ne auction.board_id }">	
+														<!-- 다른사람과 거래중이라면 -->
+														<c:if test="${status_seller eq null && board_status eq null }">	
+																<!-- 로그인아이디  -->
+																<input type="hidden" id="friend_id" name="friend_id" value="${loginid}">
+															<form action="friendRequest" method="post" class="friend">
+																<!-- 게시글작성자아이디  -->
+																<input type="hidden" id="friend_id" name="friend_id" value="${auction.board_id }">
+																<input type="hidden" id="board_num" name="board_num" value="${auction.board_num }">
+																<button type="submit" class="btn btn-primary btn-block btn-lg en">거래신청하기</button>
+															</form>
+															</c:if>
+															
+															<c:if test="${status_seller eq 'friend' || status_buyer eq 'friend'|| board_status eq 'friend'}">	
+																<!-- 거래완료버튼  -->
+																<button type="submit" class="btn btn-primary btn-block btn-lg en">거래완료</button>
+															</c:if>
+															
+															<c:if test="${status_seller eq 'request'|| board_status eq 'receive'}">	
+																<!-- 거래완료버튼  -->
+																<button type="submit" class="btn btn-primary btn-block btn-lg en">거래중</button>
+															</c:if>
+															
+														</c:if>
+														
+														
+														<!-- 본인이 쓴 게시물이라면 -->
+														<c:if test="${loginid eq auction.board_id }">
+															<!-- 거래요청을 보낸상태라면  -->
+															<c:if test="${!empty request}">
+																<table cellpadding="10">
+																	<tr>
+																		<td>아이디</td>
+																		<td>관리</td>
+																	</tr>
+																	<c:forEach var="items" items="${request}">
+																		<tr>
+																			<td><a
+																				href="${pageContext.request.contextPath}/boards_auction?friend_id=${items}">${items}</a></td>
+																			<td>
+																			<input type="hidden" id="board_num" name="board_num" value="${auction.board_num }">
+																			<input type="button" onClick="acceptFriend('${items}')" value="수락하기" class="btn btn-default"></td>
+																		</tr>
+																	</c:forEach>
+																</table>
+												
+															  	 <input type="hidden" id="friend_id" name="friend_id" value="${auction.board_id }"><br>	
+																 <input type="hidden" id="friend_id" name="friend_id" value="${request}">
+															</c:if>
+														</c:if>
+														
+													</c:if>
+													<!-- 여기까지 다른사람이 쓴글 -->
+													
+													 <!-- 만약 판매자와 구매자가 상태가 친구라면 성공으로 표시하고 계좌정보 불러오기 -->
+													<c:if test="${agree=='successed'}">
+													[판매자 정보]<br>
+													계좌정보 : ${seller_info.cus_bank} / ${seller_info.cus_account} <br><br>
+													</c:if>
+												
+													<!-- 내가 쓴 글 보기  -->
+													<!-- 만약 friend가 아니라면 -->
+													<c:if test="${agree2 =='failed'}">
+														<!-- 본인이 쓴 게시물이라면 -->
+														<c:if test="${loginid eq board.board_id }">
+
+														
+														</c:if>
+													</c:if>
+													
+													 <!-- 만약 판매자와 구매자가 상태가 친구라면 성공으로 표시하고 주소정보 불러오기 -->
+													<c:if test="${agree2=='successed'}">
+													[구매자 정보]<br>
+													주소 : ${buyer_info.cus_addr} <br> 
+													우편번호 : ${buyer_info.cus_zip_code} <br> 
+													연락처 : ${buyer_info.cus_tel}
+													
+													</c:if>
+												
 
 												</div>
 												<!---->
@@ -237,150 +315,149 @@ function updateBoard(board_num){
 							</c:if>
 							<!-- 사진이 없으면 안나옴  -->
 						</div>
+						</div >
+						<!---->
 					</div>
 					<!---->
-				</div>
-				<!---->
-				<!--글 내용-->
-				${board.board_content }
-				<!---->
-				<div class="article_writer">
-					<div class="ArticleWriterProfile">
-						<a href="/ca-fe/cafes/10050146/members/prkQguvG11zjC0KAkeAh_A"
-							class="more_area"><span class="thumb"><img
-								src="https://ssl.pstatic.net/static/cafe/cafe_pc/default/cafe_profile_77.png?type=c77_77"
-								alt="프로필 사진" width="36" height="36"
-								onerror="this.onerror='';this.src='https://ssl.pstatic.net/static/cafe/cafe_pc/default/cafe_profile_77.png';"></span><span
-							class="box"><strong class="user">${auction.board_nickname }</strong>님의
-								게시글 더보기 <svg class="svg-icon ico-post-arrow-323232">
+					<!--글 내용-->
+					${board.board_content }
+					<!---->
+					<div class="article_writer">
+						<div class="ArticleWriterProfile">
+							<a href="/ca-fe/cafes/10050146/members/prkQguvG11zjC0KAkeAh_A"
+								class="more_area"><span class="thumb"><img
+									src="https://ssl.pstatic.net/static/cafe/cafe_pc/default/cafe_profile_77.png?type=c77_77"
+									alt="프로필 사진" width="36" height="36"
+									onerror="this.onerror='';this.src='https://ssl.pstatic.net/static/cafe/cafe_pc/default/cafe_profile_77.png';"></span><span
+								class="box"><strong class="user">${auction.board_nickname }</strong>님의
+									게시글 더보기 <svg class="svg-icon ico-post-arrow-323232">
 										<use xlink:href="#ico-post-arrow-323232" aria-hidden="true"></use></svg></span></a>
-					</div>
-					<!---->
-				</div>
-				<div class="ReplyBox">
-					<div class="box_left">
-						<div class="like_article">
-							<!---->
-							<!---->
 						</div>
+						<!---->
 					</div>
-					<div class="box_right"></div>
-				</div>
-				<div class="CommentBox">
-					<div class="comment_option">
-						<h3 class="comment_title">댓글</h3>
-						<div class="comment_tab">
-							<ul class="comment_tab_list">
-								<li class="comment_tab_item"><a href="#" role="button"
-									aria-selected="true" class="comment_tab_button"> 등록순 </a></li>
-								<li class="comment_tab_item"><a href="#" role="button"
-									aria-selected="false" class="comment_tab_button"> 최신순 </a></li>
-							</ul>
-							<button type="button" class="comment_refresh_button">
-								<span class="blind">새로고침</span>
-							</button>
+					<div class="ReplyBox">
+						<div class="box_left">
+							<div class="like_article">
+								<!---->
+								<!---->
+							</div>
 						</div>
-						<div class="comment_alarm">
-							<div class="SubscribeButton">
-								<a href="#" class="button_report">신고</a>
-								<div class="ToggleSwitch ToggleSwitch--skinGray">
-									<input id="2" type="checkbox" class="switch_input blind"><label
-										for="2" class="switch_slider"><span class="blind">등록</span></label>
+						<div class="box_right"></div>
+					</div>
+					<div class="CommentBox">
+						<div class="comment_option">
+							<h3 class="comment_title">댓글</h3>
+							<div class="comment_tab">
+								<ul class="comment_tab_list">
+									<li class="comment_tab_item"><a href="#" role="button"
+										aria-selected="true" class="comment_tab_button"> 등록순 </a></li>
+									<li class="comment_tab_item"><a href="#" role="button"
+										aria-selected="false" class="comment_tab_button"> 최신순 </a></li>
+								</ul>
+								<button type="button" class="comment_refresh_button">
+									<span class="blind">새로고침</span>
+								</button>
+							</div>
+							<div class="comment_alarm">
+								<div class="SubscribeButton">
+									<a href="#" class="button_report">신고</a>
+									<div class="ToggleSwitch ToggleSwitch--skinGray">
+										<input id="2" type="checkbox" class="switch_input blind"><label
+											for="2" class="switch_slider"><span class="blind">등록</span></label>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					<!--댓글 리스트  -->
-					<c:forEach var="reply" items="${reply }">
-						<ul class="comment_list">
+						<!--댓글 리스트  -->
+						<c:forEach var="reply" items="${reply }">
+							<ul class="comment_list">
 
-							<li class="CommentItem"><div class="comment_area">
-									<a href="/ca-fe/cafes/10050146/members/prkQguvG11zjC0KAkeAh_A"
-										class="comment_thumb"><img
-										src="https://ssl.pstatic.net/static/cafe/cafe_pc/default/cafe_profile_77.png?type=c77_77"
-										alt="프로필 사진" width="36" height="36"></a>
-									<div class="comment_box">
-										<div data-v-cb8347f8="" class="comment_nick_box">
-											<div class="comment_nick_info">
-												<c:if test="${!empty reply.rreply_id }">
-													<a href="#" aria-haspopup="true" aria-expanded="false"
-														class="comment_nickname"> @${reply.reply_nickname } </a>
-													<a href="#" aria-haspopup="true" aria-expanded="false"
-														class="comment_nickname"> ${reply.rreply_nickname } </a>
-												</c:if>
+								<li class="CommentItem"><div class="comment_area">
+										<a href="/ca-fe/cafes/10050146/members/prkQguvG11zjC0KAkeAh_A"
+											class="comment_thumb"><img
+											src="https://ssl.pstatic.net/static/cafe/cafe_pc/default/cafe_profile_77.png?type=c77_77"
+											alt="프로필 사진" width="36" height="36"></a>
+										<div class="comment_box">
+											<div data-v-cb8347f8="" class="comment_nick_box">
+												<div class="comment_nick_info">
+													<c:if test="${!empty reply.rreply_id }">
+														<a href="#" aria-haspopup="true" aria-expanded="false"
+															class="comment_nickname"> @${reply.reply_nickname } </a>
+														<a href="#" aria-haspopup="true" aria-expanded="false"
+															class="comment_nickname"> ${reply.rreply_nickname } </a>
+													</c:if>
 
-												<c:if test="${empty reply.rreply_id }">
-													<a href="#" aria-haspopup="true" aria-expanded="false"
-														class="comment_nickname"> ${reply.reply_nickname } </a>
-												</c:if>
+													<c:if test="${empty reply.rreply_id }">
+														<a href="#" aria-haspopup="true" aria-expanded="false"
+															class="comment_nickname"> ${reply.reply_nickname } </a>
+													</c:if>
 
+													<!---->
+												</div>
+												<i class="LevelIcon icon_level"
+													style="background-image: url(&quot;https://ca-fe.pstatic.net/web-pc/static/img/sprite_levelicon_9dbde2.svg#1_1-usage&quot;);"></i><em
+													class="comment_badge_writer"><svg data-v-cb8347f8=""
+														aria-label="작성자" class="svg-icon ico-post-writer">
+													<use xlink:href="#ico-post-writer" aria-hidden="false"></use></svg></em>
+											</div>
+
+											<div class="comment_text_box">
+												<p class="comment_text_view">
+													<!---->
+													<span class="text_comment">${reply.reply_content }</span>
+												</p>
 												<!---->
 											</div>
-											<i class="LevelIcon icon_level"
-												style="background-image: url(&quot;https://ca-fe.pstatic.net/web-pc/static/img/sprite_levelicon_9dbde2.svg#1_1-usage&quot;);"></i><em
-												class="comment_badge_writer"><svg data-v-cb8347f8=""
-													aria-label="작성자" class="svg-icon ico-post-writer">
-													<use xlink:href="#ico-post-writer" aria-hidden="false"></use></svg></em>
-										</div>
 
-										<div class="comment_text_box">
-											<p class="comment_text_view">
+
+											<div class="comment_info_box">
+												<span class="comment_info_date">${reply.reply_date }</span>
+												<!-- 대댓글 버튼 : 자기 자신이 아닐 때만 나타나도록 -->
+
+
+											</div>
+
+
+											<div data-v-5213e8a5="" class="comment_tool">
+												<span class="sv"> 
+												<c:if
+														test="${loginid==reply.reply_id&&empty reply.rreply_id||loginid==reply.rreply_id }">
+														<input type="button" id="deleteReply" name="deleteReply" value="댓글 삭제" onClick="deleteReply('${reply.reply_num}')" class="btn btn-info">
+													</c:if> 
+												</span>
 												<!---->
-												<span class="text_comment">${reply.reply_content }</span>
-											</p>
-											<!---->
+											</div>
 										</div>
+									</div></li>
+								<!---->
+							</ul>
+						</c:forEach>
 
-
-										<div class="comment_info_box">
-											<span class="comment_info_date">${reply.reply_date }</span>
-											<!-- 대댓글 버튼 : 자기 자신이 아닐 때만 나타나도록 -->
-
-
-										</div>
-
-
-										<div data-v-5213e8a5="" class="comment_tool">
-											<span class="sv"> <c:if
-													test="${loginid==reply.reply_id&&empty reply.rreply_id||loginid==reply.rreply_id }">
-													<input type="button" id="deleteReply" name="deleteReply"
-														value="댓글 삭제" onClick="deleteReply('${reply.reply_num}')"
-														class="btn btn-info">
-												</c:if>
-											</span>
-											<!---->
-										</div>
+						<!--댓글 쓰는 칸-->
+						<c:if test="${!empty loginid}">
+							<div class="CommentWriter">
+								<div class="comment_inbox">
+									<strong class="blind">댓글을 입력하세요</strong><em
+										class="comment_inbox_name">${loginid }</em>
+									<textarea id="reply_content" name="reply_content"
+										placeholder="댓글을 남겨보세요" rows="1" class="comment_inbox_text"
+										style="height: 17px;"required></textarea>
+								</div>
+								<div class="comment_attach">
+									<div data-v-3b426d7d="" class="register_box">
+										<!---->
+										<a href="#" role="button" id="insertReply" name="insertReply"
+											class="button btn_register">등록</a>
 									</div>
-								</div></li>
-							<!---->
-						</ul>
-					</c:forEach>
-
-					<!--댓글 쓰는 칸-->
-					<c:if test="${!empty loginid}">
-						<div class="CommentWriter">
-							<div class="comment_inbox">
-								<strong class="blind">댓글을 입력하세요</strong><em
-									class="comment_inbox_name">${loginid }</em>
-								<textarea id="reply_content" name="reply_content"
-									placeholder="댓글을 남겨보세요" rows="1" class="comment_inbox_text"
-									style="height: 17px;" required></textarea>
-							</div>
-							<div class="comment_attach">
-								<div data-v-3b426d7d="" class="register_box">
-									<!---->
-									<a href="#" role="button" id="insertReply" name="insertReply"
-										class="button btn_register">등록</a>
 								</div>
 							</div>
-						</div>
-					</c:if>
-					<!--여기까지 댓글쓰는 란-->
+						</c:if>
+						<!--여기까지 댓글쓰는 란-->
+					</div>
+					<!---->
 				</div>
-				<!---->
 			</div>
 		</div>
-	</div>
 	</div>
 	<!-- .nt-body -->
 	<h3>ㅤ</h3>
