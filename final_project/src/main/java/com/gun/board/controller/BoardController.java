@@ -122,7 +122,8 @@ public class BoardController {
 		model.addAttribute("page", page);
 		model.addAttribute("endPage", endPage);
 		model.addAttribute("friend_id", friend_id);
-		return "boards/home";
+		
+		return "redirect:/boards";
 	}
 
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
@@ -132,10 +133,10 @@ public class BoardController {
 		Board board = bRepository.getBoard(board_num);
 		
 		// 작성자는 자신이 작성한 글의 조회수를 올리지 못한다
-		if (!loginid.equals(board.getBoard_id())) {
-			bRepository.upHits(board_num);
-			board = bRepository.getBoard(board_num);
-		}
+		 if (!loginid.equals(board.getBoard_id())) { bRepository.upHits(board_num);
+		 board = bRepository.getBoard(board_num);
+		 }
+		
 		
 		// 판매자와 구매자 정보를 가져온다
 		String seller = board.getBoard_id();
@@ -290,6 +291,7 @@ public class BoardController {
 	public @ResponseBody int deleteBoard(Model model, int board_num) {
 		Board board = bRepository.getBoard(board_num);
 		boolean fileDeleteResult = false;
+		
 		if (board.getBoard_uploadfileid() != null) {
 			fileDeleteResult = FileService.deleteFile(Configuration.PHOTOPATH + "/" + board.getBoard_uploadfileid());
 		}

@@ -91,13 +91,13 @@ public class AuctionController {
 		return "boards_auction/a_home";
 	}
 
-	@RequestMapping(value = "/insert", method = RequestMethod.GET)
+	@RequestMapping(value = "/a_insert", method = RequestMethod.GET)
 	public String insertBoard() {
 		logger.info("글 작성 화면으로 이동");
 		return "boards_auction/a_insert";
 	}
 
-	@RequestMapping(value = "/insert", method = RequestMethod.POST)
+	@RequestMapping(value = "/a_insert", method = RequestMethod.POST)
 	public String insertBoard(Auction auction, MultipartFile upload, Model model) {
 		System.out.println("upload 파일명: " + upload);
 		String board_id = (String) session.getAttribute("loginid");
@@ -123,7 +123,8 @@ public class AuctionController {
 		model.addAttribute("page", page);
 		model.addAttribute("endPage", endPage);
 		model.addAttribute("friend_id", friend_id);
-		return "boards_auction/a_home";
+
+		return "redirect:/boards_auction";
 	}
 
 	@RequestMapping(value = "/get", method = RequestMethod.GET)

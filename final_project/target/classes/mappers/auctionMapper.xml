@@ -23,16 +23,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		board_auction),#{board_fileid},#{board_uploadfileid}
 		)
 	</insert>
-	<!-- 게시글 조회 (기존) -->
+	
+	<!-- 게시글 조회 (수정) -->
 	<select id="getBoards" resultType="Auction" parameterType="Map">
-		<!--s elect * from board where board_id=#{friend_id} order by board_date 
-			desc -->
-		select * from board_auction left join board_file_auction on
-		board_auction.board_num=board_file_auction.board_num
-		where board_auction.board_id=#{friend_id}
-		order by board_auction.board_date desc
-	</select>
-	<!-- 거래 게시판 조회 (추가) -->
+      select * from board_auction 
+        order by board_auction.board_date desc 
+   </select>
+	
+	<!-- 경매 게시판 조회 (추가) -->
 	<select id="getTransaction" resultType="Auction"
 		parameterType="Map">
 		select * from board_auction left join board_file_auction on

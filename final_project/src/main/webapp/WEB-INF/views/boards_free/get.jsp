@@ -31,7 +31,7 @@ function deleteBoard(){
 				success : function(result) {
 					if(result==1){ 
 					alert('게시물이 성공적으로 삭제되었습니다.');
-					history.go(0);
+					location.href = "${pageContext.request.contextPath}/boards_free";
 					}
 				}
 			});}
@@ -65,6 +65,9 @@ function deleteReply(reply_num){
 			}
 		});
 }
+function updateBoard(board_num){
+	location.href = "${pageContext.request.contextPath}/boards_free/update?board_num="+board_num+"&page=${page}&friend_id=${friend_id}";
+}
 </script>
 <body>
 	<div id="nt_body" class="nt-body">
@@ -76,6 +79,7 @@ function deleteReply(reply_num){
 					<!-- 상위 수정, 삭제, 목록 버튼 -->
 					<!-- 자유게시판 수정 버튼은 사라질 수도 있음 -->
 					<c:if test="${loginid==free.board_id}">
+					<a></a>
 						<a href="#" role="button"
 							class="BaseButton BaseButton--skinGray size_default"> <input
 							type="button" value="수정" id="update" name="update"

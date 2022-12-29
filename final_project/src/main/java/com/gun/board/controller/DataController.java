@@ -129,7 +129,7 @@ public class DataController {
 		model.addAttribute("page", page);
 		model.addAttribute("endPage", endPage);
 		model.addAttribute("friend_id", friend_id);
-		return "boards_data/data";
+		return "redirect:/boards_data";
 	}
 
 	@RequestMapping(value = "/get", method = RequestMethod.GET)

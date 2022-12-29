@@ -59,7 +59,7 @@ function deleteBoard(){
 				success : function(result) {
 					if(result==1){ 
 					alert('게시물이 성공적으로 삭제되었습니다.');
-					history.go(0);
+					location.href = "${pageContext.request.contextPath}/boards";
 					}
 				}
 			});}
@@ -125,6 +125,7 @@ function insertR_reply(reply_num){
 				
 					<!-- 작성자 본인이라면 수정, 삭제  -->
 					<c:if test="${loginid==board.board_id }">
+					<a></a>
 						<a href="#" role="button"
 							class="BaseButton BaseButton--skinGray size_default"> 
 							<input type="button" value="수정" id="update" name="update"
@@ -172,13 +173,8 @@ function insertR_reply(reply_num){
 								</div>
 								<em class="nick_level"> 열심회원 <i data-v-d34938e2=""
 									class="LevelIcon icon_level"
-									style="background-image: url(&quot;https://ca-fe.pstatic.net/web-pc/static/img/sprite_levelicon_9dbde2.svg#1_1-usage&quot;);"></i></em>
-									
-									<c:if test="${agree=='successed'}">
-										<a href="${pageContext.request.contextPath}/message/messageView?board_num=${board.board_num}" 
-										class="link_talk win_password_lost">메세지</a>
-									
-									</c:if>
+									style="background-image: url(&quot;https://ca-fe.pstatic.net/web-pc/static/img/sprite_levelicon_9dbde2.svg#1_1-usage&quot;);"></i></em><a
+									href="#" class="link_talk">구매문의</a>
 							</div>
 							<div class="article_info">
 
