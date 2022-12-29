@@ -54,6 +54,7 @@ public class AdminController {
 	public String ajaxTest(HttpServletRequest request, Model model,
 			@RequestParam(value = "page", defaultValue = "1") int page) throws Exception {
 
+		System.out.println("하이루");
 		System.out.println("delete �룄�떖@@@");
 		String[] ajaxMsg = request.getParameterValues("valueArr");
 

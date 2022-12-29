@@ -42,6 +42,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
    <delete id="deleteBoards_free">
       delete from board_free where board_num=#{board_num}
+      
    </delete>
 
    <update id="updateBoards_free">

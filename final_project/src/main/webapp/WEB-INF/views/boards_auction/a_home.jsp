@@ -152,7 +152,7 @@
 
 								</button>
 
-								<a href="${pageContext.request.contextPath}/boards_auction/a_insert" class="btn btn-primary nofocus py-1 ml-2" role="button"> <i
+								<a href="${pageContext.request.contextPath}/boards_auction/insert" class="btn btn-primary nofocus py-1 ml-2" role="button"> <i
 										class="fa fa-pencil" aria-hidden="true"></i>쓰기</a>
 									<button type="button" id="sortNew" value="new" class="btn btn-primary">최신순</button>
 									<button type="button" id="sortCount" value="count" class="btn btn-primary">조회순</button>

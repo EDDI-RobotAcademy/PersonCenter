@@ -122,7 +122,7 @@ public class BoardController {
 		model.addAttribute("page", page);
 		model.addAttribute("endPage", endPage);
 		model.addAttribute("friend_id", friend_id);
-		return "boards/home";
+		return "redirect:boards";
 	}
 
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
