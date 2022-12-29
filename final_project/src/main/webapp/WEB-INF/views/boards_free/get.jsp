@@ -79,6 +79,7 @@ function updateBoard(board_num){
 					<!-- 상위 수정, 삭제, 목록 버튼 -->
 					<!-- 자유게시판 수정 버튼은 사라질 수도 있음 -->
 					<c:if test="${loginid==free.board_id}">
+					<a></a>
 						<a href="#" role="button"
 							class="BaseButton BaseButton--skinGray size_default"> <input
 							type="button" value="수정" id="update" name="update"

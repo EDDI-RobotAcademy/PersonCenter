@@ -50,6 +50,7 @@ function updateBoard(board_num){
 				
 					<!-- 작성자 admin이라면 수정, 삭제  -->
 					<c:if test="${loginid=='admin'}">
+					<a></a>
 						<a href="#" role="button"
 							class="BaseButton BaseButton--skinGray size_default"> <input
 							type="button" value="수정" id="update" name="update"
