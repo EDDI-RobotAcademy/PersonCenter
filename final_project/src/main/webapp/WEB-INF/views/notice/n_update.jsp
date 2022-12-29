@@ -12,16 +12,18 @@
 <link
 	href="${pageContext.request.contextPath}/resources/css/clean-blog.min.css"
 	rel="stylesheet">
+<link href="${pageContext.request.contextPath}/resources/css/write.css"
+	rel="stylesheet">
+<link href="${pageContext.request.contextPath}/resources/css/read.css"
+	rel="stylesheet">
 </head>
 
 <script>
 	$(function() {
-		makeCheck();
+	
 		$('#update').on('click', updateBoard);
 	});
-	function makeCheck(){
-		$("#${board_notice.board_no_see}").prop("checked", true);			
-	}
+	
 	function updateBoard() {
 		$
 				.ajax({
@@ -31,12 +33,11 @@
 						"board_num":${board_notice.board_num},
 						"board_no_title" :  $("#board_no_title").val(),
 						"board_no_content" : $("#board_no_content").val(),
-						"board_no_see" : $("input[type=radio][name=board_no_see]:checked").val(),
 						"page":${page},
 						"friend_id":${friend_id}
 					},
 					success : function(board_num) {
-							alert('Your post is updated successfully');
+							alert('공지 수정 완료');
 							location.href = "${pageContext.request.contextPath}/notice/get?board_num="+board_num+"&page=${page}&friend_id=${friend_id}";
 					}
 				});
@@ -44,65 +45,61 @@
 
 </script>
 <body>
-	<!-- Page Header -->
-	<header class="masthead"
-		style="background-image: url('${pageContext.request.contextPath}/resources/img/home-bg.jpg')">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-8 col-md-10 mx-auto">
-					<div class="site-heading">
-						<h1>Write Diary</h1>
-						<span class="subheading"> Write and share your daily life
-							with your friends! </span>
+
+	<div id="nt_body" class="nt-body">
+		<div class="nt-container px-0 px-sm-4 px-xl-0 pt-0 pt-sm-4">
+
+			<!-- 메인 -->
+			<form action="update" method="post" enctype="multipart/form-data">
+				<input type="hidden" id="board_num" name="board_num"
+					value="${board.board_num }"> 
+				<input type="hidden" id="page" name="page" value="${page }">
+
+				<div class="WritingCommerce">
+					<div class="form_box">
+						<h4 class="form_label">
+							공지 사항 수정<span role="img" aria-label="필수" class="validation">*</span>
+						</h4>
+
 					</div>
-				</div>
-			</div>
-		</div>
-	</header>
-	<!-- Main Content -->
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-8 col-md-10 mx-auto">
-				<div class="post-preview">
-					<h2>Update diary</h2>
-					<hr>
-					<form action="update" method="post" enctype="multipart/form-data">
-						<input type="hidden" id="board_num" name="board_num"
-							value="${board.board_num }"> <input type="hidden"
-							id="page" name="page" value="${page }">
-							
-						<table class="table">
-							<tr>
-								<td>Title</td>
-								<td><input type="text" id="board_no_title" name="board_no_title"
-									class="form-control" value="${board.board_no_title }"></td>
-							</tr>
-							<tr>
-								<td>Privacy bounds</td>
-								<td><input type="radio" id="all" name="board_no_see"
-									value="all">all<br> <input type="radio"
-									id="friend" name="board_no_see" value="friend">to only
-									friends<br> <input type="radio" id="secret"
-									name="board_no_see" value="secret">private<br></td>
-							</tr>
-							<tr>
-								<td>Picture</td>
-								<td><input type="file" name="upload"></td>
-							</tr>
-							<tr>
-								<td>Content</td>
-								<td><textArea id="board_no_content" name="board_no_content"
-										class="form-control" rows="20">${board.board_no_content}</textArea></td>
-							</tr>
-						</table>
-						<input type="submit" value="Update" class="btn btn-default">
-						<input type="button" value="Back"
-							onclick="location.href='${pageContext.request.contextPath}/'"
-							class="btn btn-default">
-					</form>
-				</div>
-			</div>
+					<div class="form_box">
+						<div class="input-group mb-3">
+							<input type="text" class="form-control" id="board_no_title"
+								name="board_no_title" placeholder="제목" required
+								class="form-control"
+								aria-label="Text input with dropdown button"
+								style="width: 300px">
+							</div>
+						<br>
+					</div>
+					<!-- 공개설정 -->
+					<input type="hidden" name="board_no_see" value="all" checked>
+					<div class="form_box">
+						<h4 class="form_label">
+							내용 입력<span role="img" aria-label="필수" class="validation">*</span>
+						</h4>
+					</div>
+					<h1>ㅤ</h1>
+						<textArea id="board_no_content" name="board_no_content" required
+							class="form-control" rows="20"></textArea>
+						<h1>ㅤ</h1>
+						<input type="submit" class="btn btn-default" id="btn" value="글수정"
+							style="float: right; background-color: #d7ebc2; border-radius: 10px">
+						<h1>ㅤ</h1>
+					</div>
+			</form>
 		</div>
 	</div>
+
+
+	<script
+		src="${pageContext.request.contextPath}/resources/vendor/jquery/jquery.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/vendor/popper/popper.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/clean-blog.min.js"></script>
+
 </body>
 </html>

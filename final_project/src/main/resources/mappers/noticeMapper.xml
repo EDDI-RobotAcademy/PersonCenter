@@ -6,23 +6,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.gun.board.dao.NoticeDAO">
    <insert id="insertBoard">
       insert into
-      board_notice(board_num, board_no_title, board_no_content, board_no_id, board_no_nickname, board_no_see)
+      board_notice(board_num, board_no_title, board_no_content, board_no_id, board_no_nickname)
       values(
-      BOARD_NOTICE_SEQ.NEXTVAL, #{board_no_title}, #{board_no_content}, #{board_no_id}, #{board_no_nickname}, #{board_no_see}
+      BOARD_NOTICE_SEQ.NEXTVAL, #{board_no_title}, #{board_no_content}, #{board_no_id}, #{board_no_nickname}
       
       )
       
-   </insert>
-   
-   <insert id="insertPhoto">
-      insert into board_no_file(board_num, board_fileid,board_uploadfileid)
-      values(
-      (select max(board_num) from board_notice),#{board_fileid},#{board_uploadfileid}
-      )
    </insert>
 
    <select id="getBoards" resultType="Notice" parameterType="Map">
-   
       select * from board_notice 
       order by board_no_date DESC
    </select>
@@ -31,12 +23,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
       select*from board_notice 
   	  where board_num=#{board_num}
    </select>
-
-   <update id="upHits">
-      update board_notice set board_no_hits=board_no_hits+1
-      where
-      board_num=#{board_num}
-   </update>
 
    <delete id="deleteBoard">
       delete from board_notice where board_num=#{board_num}
@@ -49,35 +35,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
    <update id="updateBoard">
       update board_notice set board_no_title=#{board_no_title},
-      board_no_content=#{board_no_content},
-      board_no_see=#{board_no_see}
+      board_no_content=#{board_no_content}
       where
       board_num=#{board_num}
    </update>
    
-   <update id="updatePhoto">
-      update board_no_file set board_fileid=#{board_fileid}, board_uploadfileid=#{board_uploadfileid}
-      where board_num=#{board_num}
-   </update>
-   
-
-
-   <update id="changeReply">
-      <choose>
-         <when test="type==0">
-            update board_notice
-            set board_no_replies=board_no_replies+1
-            where
-            board_num=#{board_num}
-         </when>
-         <when test="type==1">
-            update board_notice
-            set board_no_replies=board_no_replies-1
-            where
-            board_num=#{board_num}
-         </when>
-      </choose>
-   </update>
+<!-- 게시글 조회 home용  -->
+   <select id="getNotice_home" resultType="Notice" parameterType="List">
+      
+      select  * from (select * from board_notice order by board_no_date desc)
+      <![CDATA[where rownum <= 5]]>
+      
+   </select>
    
    <select id="findNotice" parameterType="Map" resultType="Notice">
       select * from board_notice
@@ -109,35 +78,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          
          
       </choose> 
-   </select>
-   
-   
-   <select id="getSort" parameterType="Map" resultType="Notice">
-      
-         select * from board_notice
-         <choose>
-            <when test="sortValue=='new'">
-                ORDER BY board_no_date DESC
-            </when>
-            
-            <when test="sortValue=='count'">
-                ORDER BY board_no_seq DESC
-            </when>
-            
-            <when test="sortValue=='title'">
-                ORDER BY board_no_title ASC
-            </when>
-         </choose>
-         
-      
-   </select>
-   
-   <!-- 게시글 조회 home용  -->
-   <select id="getNotice_home" resultType="Notice" parameterType="List">
-      
-      select  * from (select * from board_notice order by board_no_date desc)
-      <![CDATA[where rownum <= 5]]>
-      
    </select>
    
    

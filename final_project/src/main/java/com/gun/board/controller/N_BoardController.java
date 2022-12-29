@@ -227,29 +227,10 @@ public class N_BoardController {
    }
 
    @RequestMapping(value = "/update", method = RequestMethod.POST)
-   public String updateBoard(int board_num, Notice board, int page, String friend_id, Model model,
-         MultipartFile upload) {
-      Notice originalBoard = nRepository.getBoard(board_num);
-      
+   public String updateBoard(int board_num, Notice board, int page, String friend_id, Model model) {
+ 
       String loginid = (String) session.getAttribute("loginid");
-      String board_fileid = "";
-      String board_uploadfileid = "";
-      if (originalBoard.getBoard_fileid() != null) {
-         board_fileid = originalBoard.getBoard_fileid();
-         board_uploadfileid = originalBoard.getBoard_uploadfileid();
-      }
-      if (upload.getOriginalFilename() != null) {
-         if (originalBoard.getBoard_uploadfileid() != null) {
-            board_uploadfileid = originalBoard.getBoard_uploadfileid();
-            FileService.deleteFile(board_uploadfileid);
-         }
-         board_uploadfileid = FileService.saveFile(upload, Configuration.PHOTOPATH);
-         System.out.println("after adjustment: " + board_uploadfileid);
-      }
-      if (originalBoard.getBoard_fileid() != null || upload.getOriginalFilename() != null) {
-         board.setBoard_fileid(board_fileid);
-         board.setBoard_uploadfileid(board_uploadfileid);
-      }
+
       int result = nRepository.updateBoard(board);
       logger.info("           : " + board.toString());
       ArrayList<Notice> boards = nRepository.getBoards(loginid);
@@ -296,7 +277,7 @@ public class N_BoardController {
       return "notice/n_home";
    }
    
-   //  ˻    
+     
    @RequestMapping(value = "/findNotice", method = RequestMethod.POST)
    public String findNotice(Model model, @RequestParam(value = "searchType", defaultValue = "" ) String searchType,
          @RequestParam(value = "searchContent", defaultValue = "") String searchContent) {
@@ -321,42 +302,6 @@ public class N_BoardController {
       result = searchNotice.size();
       return "notice/n_home";
    }
-   
-   
-   //SortNotice
-    @RequestMapping(value ="/SortNotice", method = RequestMethod.GET)
-    public  String SortNotice(String sortValue, Model model) {   
-       
-   
-       System.out.println("SortNotice     @@ sortValue : " + sortValue);
-      
-       ArrayList<Notice> boards = nRepository.getSort(sortValue);
-       
-       int page = 1;
-      
-      int totalPages = Pagination.totalPages(boards);
-      page = Pagination.getCurrentPage(page, totalPages);
-      boards = Pagination.totalPosts(boards, page);
-      int endPage = Pagination.endPage(page, totalPages);
-      
-      model.addAttribute("page", page);
-      model.addAttribute("endPage", endPage);
 
-      model.addAttribute("boards", boards);
-      
-         return "notice/n_home";
-    }
    
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   //        ݴ° ȣ
 }

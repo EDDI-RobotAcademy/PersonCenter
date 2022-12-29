@@ -16,5 +16,6 @@ encoding//src/main/java/com/gun/board/util/N_Pagination.java=UTF-8
 encoding//src/main/java/com/gun/board/vo/Notice.java=UTF-8
 encoding//src/main/webapp/WEB-INF/views/boards/home.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/views/include/header.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/notice/n_insert.jsp=UTF-8
 encoding//src/main/webapp/resources/css/read.css=UTF-8
 encoding//src/main/webapp/resources/css/write.css=UTF-8

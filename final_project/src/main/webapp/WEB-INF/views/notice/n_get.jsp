@@ -50,16 +50,17 @@ function updateBoard(board_num){
 				
 					<!-- 작성자 admin이라면 수정, 삭제  -->
 					<c:if test="${loginid=='admin'}">
+						<a></a>
 						<a href="#" role="button"
-							class="BaseButton BaseButton--skinGray size_default"> <input
-							type="button" value="수정" id="update" name="update"
-							onclick="updateBoard('${board.board_num}')"
-							class="btn btn-default">
+							class="BaseButton BaseButton--skinGray size_default">
+							<input type="button" value="수정" id="update" name="update"
+								onclick="updateBoard('${board.board_num}')"
+								class="btn btn-default">
 						</a>
-
 						<a href="#" role="button"
-							class="BaseButton BaseButton--skinGray size_default"> <input
-							type="button" value="삭제" id="delete" name="delete"
+							class="BaseButton BaseButton--skinGray size_default">
+							
+						 <input	type="button" value="삭제" id="delete" name="delete"
 							class="btn btn-default">
 						</a>
 					</c:if>
@@ -206,29 +207,15 @@ function updateBoard(board_num){
 					<div class="CommentBox">
 						<div class="comment_option">
 							<div class="comment_tab">
-							<!-- 
-								<ul class="comment_tab_list">
-									<li class="comment_tab_item"><a href="#" role="button"
-										aria-selected="true" class="comment_tab_button"> 등록순 </a></li>
-									<li class="comment_tab_item"><a href="#" role="button"
-										aria-selected="false" class="comment_tab_button"> 최신순 </a></li>
-								</ul>
-								<button type="button" class="comment_refresh_button">
-									<span class="blind">새로고침</span>
-								</button>
-								-->
+						
 							</div>
-							
-						
 						</div>
-						
 					</div>
-					<!---->
 				</div>
 			</div>
 		</div>
 		</div>
-	</div>
+	
 	<!-- .nt-body -->
 	<h3>ㅤ</h3>
 </body>
