@@ -31,7 +31,7 @@ function deleteBoard(){
 				success : function(result) {
 					if(result==1){ 
 					alert('게시물이 성공적으로 삭제되었습니다.');
-					history.go(0);
+					location.href = "${pageContext.request.contextPath}/boards_free";
 					}
 				}
 			});}
@@ -64,6 +64,9 @@ function deleteReply(reply_num){
 				history.go(0);
 			}
 		});
+}
+function updateBoard(board_num){
+	location.href = "${pageContext.request.contextPath}/boards_free/update?board_num="+board_num+"&page=${page}&friend_id=${friend_id}";
 }
 </script>
 <body>

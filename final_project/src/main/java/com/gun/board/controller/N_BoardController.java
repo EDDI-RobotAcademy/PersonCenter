@@ -139,7 +139,7 @@ public class N_BoardController {
       
       model.addAttribute("boards", boards);
       
-         return "notice/n_home";
+         return "redirect:/notice";
    }
 
    @RequestMapping(value = "/get", method = RequestMethod.GET)

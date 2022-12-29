@@ -124,7 +124,7 @@ public class FreeController {
       model.addAttribute("page", page);
       model.addAttribute("endPage", endPage);
       model.addAttribute("friend_id", friend_id);
-      return "boards_free/free";
+      return "redirect:/boards_free";
    }
 
    @RequestMapping(value = "/get", method = RequestMethod.GET)
