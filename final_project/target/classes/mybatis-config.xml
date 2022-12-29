@@ -23,6 +23,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<typeAlias type="com.gun.board.vo.Reply_Data" alias="Reply_Data" />
 		<typeAlias type="com.gun.board.vo.Reply_Free" alias="Reply_Free" />
 		<typeAlias type="com.gun.board.vo.Auction" alias="Auction" />
+		<typeAlias type="com.gun.board.vo.Friend" alias="Friend" />
 	</typeAliases>
 	
 </configuration>

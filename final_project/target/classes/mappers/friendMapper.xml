@@ -130,5 +130,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		cus_id=#{cus_id} and
 		board_num = #{board_num}
 	</select>
+	
+	
+	<select id="getTrader" resultType="Friend" parameterType="Map">
+      select * from
+      board_friend 
+      where board_num=#{board_num}
+    	 and cus_id=#{cus_id}
+   </select>
 
 </mapper>

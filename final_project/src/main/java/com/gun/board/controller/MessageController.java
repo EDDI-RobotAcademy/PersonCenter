@@ -14,24 +14,30 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.gun.board.repository.FriendRepository;
 import com.gun.board.repository.MessageRepository;
+import com.gun.board.repository.ReplyRepository;
 import com.gun.board.util.Pagination;
 import com.gun.board.vo.Board;
+import com.gun.board.vo.Friend;
 import com.gun.board.vo.Message;
 
 @RequestMapping(value = "/message")
 @Controller
 public class MessageController {
 	private static final Logger logger = LoggerFactory.getLogger(MessageController.class);
-
+	
 	@Inject
 	HttpSession session;
+	
+	@Inject
+	FriendRepository fRepository;
 
 	@Inject
 	MessageRepository mRepository;
 
 	Pagination pagination = new Pagination();
-
+	
 	@RequestMapping(value = "/management", method = RequestMethod.GET)
 	public String management(Model model, @RequestParam(value = "page", defaultValue = "1") int page, String category) {
 		logger.info("메세지관리" + category);
@@ -108,5 +114,17 @@ public class MessageController {
 		model.addAttribute("category", category);
 		return result;
 	}
-
+	
+	
+	@RequestMapping(value = "/messageView", method = RequestMethod.GET)
+	public String messageView(Model model, int board_num) {
+		
+		String cus_id = (String) session.getAttribute("loginid");
+		Friend trader  = fRepository.getTrader(board_num,cus_id);
+		
+		
+		model.addAttribute("trader", trader);
+		
+		return "message/messageView";
+	}
 }

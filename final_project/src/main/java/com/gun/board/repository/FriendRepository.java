@@ -11,7 +11,9 @@ import org.springframework.stereotype.Repository;
 
 import com.gun.board.dao.BoardDAO;
 import com.gun.board.dao.FriendDAO;
+import com.gun.board.vo.Board;
 import com.gun.board.vo.Customer;
+import com.gun.board.vo.Friend;
 
 @Repository
 public class FriendRepository {
@@ -149,7 +151,7 @@ public class FriendRepository {
 	}
 	
 	
-	// (¼öÁ¤ÇÑºÎºÐ) ¼ö¶ôÇÏ±â ´©¸£¸é friend ·Î ¹Ù²Ù°í board_num °ª ³Ö±â 
+	// (     ÑºÎº )      Ï±         friend     Ù²Ù°  board_num     Ö±  
 		public int accept_2(String cus_id, String friend_id, int board_num) {
 			fdao = sqlSession.getMapper(FriendDAO.class);
 			int result = 0;
@@ -168,7 +170,7 @@ public class FriendRepository {
 			return result;
 		}
 
-		// (¼öÁ¤ÇÑºÎºÐ) ÆÇ¸ÅÀÚ, ±¸¸ÅÀÚ, °Ô½Ã±Û ¹øÈ£ °ªÀ» °¡Á®°¨ 
+		// (     ÑºÎº )  Ç¸   ,       ,  Ô½Ã±    È£             
 		public String getStatus_2(String cus_id, String friend_id, int board_num) {
 			fdao = sqlSession.getMapper(FriendDAO.class);
 			String result = "";
@@ -235,5 +237,21 @@ public class FriendRepository {
 			return result;
 			
 		}
+
+		public Friend getTrader(int board_num, String cus_id) {
+			Friend result = new Friend();
+			fdao = sqlSession.getMapper(FriendDAO.class);
+			Map<String, Object> search = new HashMap();
+			search.put("cus_id", cus_id);
+			search.put("board_num", board_num);
+			try {
+				result = fdao.getTrader(search);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return result;
+		}
+
 
 }

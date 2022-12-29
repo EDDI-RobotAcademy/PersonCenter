@@ -172,8 +172,13 @@ function insertR_reply(reply_num){
 								</div>
 								<em class="nick_level"> 열심회원 <i data-v-d34938e2=""
 									class="LevelIcon icon_level"
-									style="background-image: url(&quot;https://ca-fe.pstatic.net/web-pc/static/img/sprite_levelicon_9dbde2.svg#1_1-usage&quot;);"></i></em><a
-									href="#" class="link_talk">구매문의</a>
+									style="background-image: url(&quot;https://ca-fe.pstatic.net/web-pc/static/img/sprite_levelicon_9dbde2.svg#1_1-usage&quot;);"></i></em>
+									
+									<c:if test="${agree=='successed'}">
+										<a href="${pageContext.request.contextPath}/message/messageView?board_num=${board.board_num}" 
+										class="link_talk win_password_lost">메세지</a>
+									
+									</c:if>
 							</div>
 							<div class="article_info">
 

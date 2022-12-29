@@ -6,42 +6,43 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 import com.gun.board.vo.Customer;
+import com.gun.board.vo.Friend;
 
 public interface FriendDAO {
 
-	// 친구 찾기
+	// 친   찾  
 	public ArrayList<Customer> findFriends(Map<String, String> search) throws Exception;
 
-	// 친구 요청의 개수
+	// 친     청       
 	public int numofFriendRequest(String cus_id) throws Exception;
 
-	// 친구인지 여부 확인(혹은 이미 신청한 상태인지)
+	// 친            확  (혹    譴    청           )
 	public String getStatus(Map<String, String> search) throws Exception;
 
-	// 친구 신청
+	// 친     청
 	public int friendRequest(Map<String, String> request) throws Exception;
 
 	public int friendRequestFriend(Map<String, String> request) throws Exception;
 
-	// 친구 리스트 뽑기
+	// 친       트  堅 
 	public ArrayList<String> getList(String cus_id) throws Exception;
 
-	// 친구 신청 받은 목록 뽑기
+	// 친     청           堅 
 	public ArrayList<String> getRequestList(@Param("cus_id")String cus_id, @Param("board_num")int board_num) throws Exception;
 
-	// 친구 수락하기
+	// 친        歐 
 	public int accept(Map<String, String> accept) throws Exception;
 
 	public int acceptFriend(Map<String, String> accept) throws Exception;
 
-	// 친구 삭제
+	// 친       
 	public int remove(Map<String, String> remove) throws Exception;
 
 	public int removeFriend(Map<String, String> remove) throws Exception;
 
 	public String getfriend(String login_id) throws Exception;
 	
-	// 거래 수락시 업데이트 (수정한부분)
+	//  킹               트 (     紀觀 )
 	public int accept_2(Map<String, Object> accept)throws Exception;
 
 	public void acceptFriend_2(Map<String, Object> accept)throws Exception;
@@ -55,6 +56,8 @@ public interface FriendDAO {
 	public String getfriend_2(Map<String, Object> request)throws Exception;
 
 	public String getStatus_board(Map<String, Object> search)throws Exception;
+
+	public Friend getTrader(Map<String, Object> search)throws Exception;
 	
 	
 }
